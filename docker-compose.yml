@@ -1,0 +1,133 @@
+services:
+############################## PROXY ########################################
+  opencdmp.proxy:
+      container_name: opencdmp.proxy
+      image: nginx:${PROXY_TAG}
+      depends_on:
+        opencdmp.frontend:
+          condition: service_started
+        opencdmp.backend:
+          condition: service_started
+        opencdmp.notification:
+          condition: service_started
+        opencdmp.annotation:
+          condition: service_started
+
+############################## OPENCDMP APP #################################
+
+  opencdmp.frontend:
+    container_name: opencdmp.frontend
+    image: opencdmp/opencdmp-webapp:${MAIN_APP_TAG}
+    depends_on:
+      opencdmp.backend:
+        condition: service_started
+      opencdmp.notification:
+        condition: service_started
+      opencdmp.annotation:
+        condition: service_started
+      opencdmp.keycloak:
+        condition: service_healthy
+
+  opencdmp.backend:
+    container_name: opencdmp.backend
+    image: opencdmp/opencdmp-api:${MAIN_APP_TAG}
+    depends_on:
+      opencdmp.postgres:
+        condition: service_healthy
+      opencdmp.keycloak:
+        condition: service_healthy
+      opencdmp.elasticsearch:
+        condition: service_healthy
+      opencdmp.rabbitmq:
+        condition: service_healthy
+
+  opencdmp.notification:
+    container_name: opencdmp.notification
+    image: citesa/java-pomolo-notification-api:${NOTIFICATION_APP_TAG}
+    depends_on:
+      opencdmp.postgres:
+        condition: service_healthy
+      opencdmp.keycloak:
+        condition: service_healthy
+      opencdmp.rabbitmq:
+        condition: service_healthy
+
+  opencdmp.annotation:
+    container_name: opencdmp.annotation
+    image: citesa/java-pomolo-annotation-api:${ANNOTATION_APP_TAG}
+    depends_on:
+      opencdmp.postgres:
+        condition: service_healthy
+      opencdmp.keycloak:
+        condition: service_healthy
+      opencdmp.rabbitmq:
+        condition: service_healthy
+
+
+############################## FILE-TRANSFORMERS #######################################
+
+  opencdmp.file.transformer.docx:
+    container_name: opencdmp.file.transformer.docx
+    image: opencdmp/file-transformer-docx:${DOCX_APP_TAG}
+    depends_on:
+      opencdmp.backend:
+        condition: service_started
+
+  opencdmp.file.transformer.rdajson:
+    container_name: opencdmp.file.transformer.rdajson
+    image: opencdmp/file-transformer-rda-json:${JSON_APP_TAG}
+    depends_on:
+      opencdmp.backend:
+        condition: service_started
+
+############################## EVALUATOR #######################################
+
+  opencdmp.evaluator:
+    container_name: opencdmp.evaluator
+    image: opencdmp/evaluator-rda-madmp:${EVALUATOR_APP_TAG}
+    depends_on:
+      opencdmp.backend:
+        condition: service_started
+
+################################ ZENODO ###############################################
+  opencdmp.zenodo:
+    container_name: opencdmp.zenodo
+    image: opencdmp/repository-deposit-zenodo:${ZENODO_APP_TAG}
+    depends_on:
+      opencdmp.backend:
+        condition: service_started
+
+############################## POSTGRES ############################################
+  opencdmp.postgres:
+    container_name: opencdmp.postgres
+    image: postgres:${POSTGRES_TAG}
+
+################################# ELASTICSEARCH #################################################
+  opencdmp.elasticsearch.setup:
+    container_name: opencdmp.elasticsearch.setup
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_TAG}
+    depends_on:
+      opencdmp.elasticsearch:
+        condition: service_healthy
+
+  opencdmp.elasticsearch:
+    container_name: opencdmp.elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_TAG}
+
+############################# KEYCLOAK ###############################################
+  opencdmp.keycloak:
+    container_name: opencdmp.keycloak
+    image: quay.io/keycloak/keycloak:${KEYCLOAK_TAG}
+    depends_on:
+      opencdmp.postgres:
+        condition: service_healthy
+
+############################## RABBITMQ ###############################################
+  opencdmp.rabbitmq:
+    container_name: opencdmp.rabbitmq
+    image: rabbitmq:${RABBITMQ_TAG}
+
+############################## PDF SERVICE ##############################################
+  opencdmp.pdf-service:
+    image: gotenberg/gotenberg:${PDF_SERVICE_TAG}
+    container_name: opencdmp.pdf-service

@@ -1,0 +1,10 @@
+evaluator:
+  sources:
+    - url: http://opencdmp.evaluator:8080/
+      evaluatorId: rda-maDMP
+      rdaTransformerId: rda-file-transformer
+      issuer-url: ${EVALUATOR_AUTH_TOKEN_ENDPOINT}
+      client-id: ${EVALUATOR_AUTH_CLIENT_ID}
+      client-secret: ${EVALUATOR_AUTH_CLIENT_SECRET}
+      scope: ${EVALUATOR_AUTH_SCOPE}
+      maxInMemorySizeInBytes: 6554000

@@ -1,0 +1,16 @@
+file-transformer:
+  sources:
+    - url: http://opencdmp.file.transformer.docx:8080
+      transformerId: docx-file-transformer
+      issuer-url: ${FILE_TRANSFORMER_AUTH_TOKEN_ENDPOINT}
+      client-id: ${FILE_TRANSFORMER_AUTH_CLIENT_ID}
+      client-secret: ${FILE_TRANSFORMER_AUTH_CLIENT_SECRET}
+      scope: ${FILE_TRANSFORMER_AUTH_SCOPE}
+      maxInMemorySizeInBytes: 6554000
+    - url: http://opencdmp.file.transformer.rdajson:8080
+      transformerId: rda-file-transformer
+      issuer-url: ${FILE_TRANSFORMER_AUTH_TOKEN_ENDPOINT}
+      client-id: ${FILE_TRANSFORMER_AUTH_CLIENT_ID}
+      client-secret: ${FILE_TRANSFORMER_AUTH_CLIENT_SECRET}
+      scope: ${FILE_TRANSFORMER_AUTH_SCOPE}
+      maxInMemorySizeInBytes: 6554000

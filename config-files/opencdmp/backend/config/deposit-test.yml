@@ -1,0 +1,11 @@
+deposit:
+  sources:
+    - url: http://opencdmp.zenodo:8080
+      repositoryId: zenodo
+      pdfTransformerId: docx-file-transformer
+      rdaTransformerId: rda-file-transformer
+      issuer-url: ${DEPOSIT_AUTH_TOKEN_ENDPOINT}
+      client-id: ${DEPOSIT_AUTH_CLIENT_ID}
+      client-secret: ${DEPOSIT_AUTH_CLIENT_SECRET}
+      scope: ${DEPOSIT_AUTH_SCOPE}
+      maxInMemorySizeInBytes: 6554000

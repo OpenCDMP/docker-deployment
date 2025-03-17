@@ -1,0 +1,158 @@
+permissions:
+  policies:
+    DeferredAffiliation:
+      roles:
+        - TenantAdmin
+        - TenantUser
+        - TenantPlanManager
+        - TenantConfigManager
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    # Tenants
+    BrowseTenant:
+      roles: [ ]
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    EditTenant:
+      roles: [ ]
+      clients: [ "opencdmp-api-dev" ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    DeleteTenant:
+      roles: [ ]
+      claims: [ ]
+      clients: [ "opencdmp-api-dev" ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    AllowNoTenant:
+      roles:
+        - Admin
+        - InstallationAdmin
+      claims: [ ]
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    # Users
+    BrowseUser:
+      roles:
+        - Admin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    EditUser:
+      roles: [ ]
+      clients: [ "opencdmp-api-dev" ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    DeleteUser:
+      roles: [ ]
+      claims: [ ]
+      clients: [ "opencdmp-api-dev" ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    #Annotation
+    BrowseAnnotation:
+      roles:
+        - Admin
+        - TenantAdmin
+      entityAffiliated: true
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    NewAnnotation:
+      roles:
+        - Admin
+        - TenantAdmin
+      entityAffiliated: true
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    EditAnnotation:
+      roles:
+        - Admin
+        - TenantAdmin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    DeleteAnnotation:
+      roles:
+        - Admin
+        - TenantAdmin
+      entityAffiliated: false
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    #Tenant Configuration
+    BrowseTenantConfiguration:
+      roles:
+        - Admin
+        - TenantAdmin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    EditTenantConfiguration:
+      roles:
+        - Admin
+        - TenantAdmin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    #Status
+    BrowseStatus:
+      roles:
+        - Admin
+        - TenantAdmin
+      entityAffiliated: true
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    EditStatus:
+      roles:
+        - Admin
+        - TenantAdmin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    DeleteStatus:
+      roles:
+        - Admin
+        - TenantAdmin
+      entityAffiliated: false
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    #AnnotationStatus
+    BrowseAnnotationStatus:
+      roles:
+        - Admin
+        - TenantAdmin
+      entityAffiliated: true
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    EditAnnotationStatus:
+      roles:
+        - Admin
+        - TenantAdmin
+      entityAffiliated: true
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    DeleteAnnotationStatus:
+      roles:
+        - Admin
+        - TenantAdmin
+      entityAffiliated: true
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    # ViewPage Status
+    ViewStatusPage:
+      roles:
+        - Admin
+        - TenantAdmin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false

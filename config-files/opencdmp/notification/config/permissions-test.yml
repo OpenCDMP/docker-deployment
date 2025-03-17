@@ -1,0 +1,193 @@
+permissions:
+  extendedClaims: [ ]
+  policies:
+
+    # Tenants
+    BrowseTenant:
+      roles: []
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    EditTenant:
+      roles: []
+      clients: [ "opencdmp-api-dev" ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    DeleteTenant:
+      roles: []
+      claims: [ ]
+      clients: [ "opencdmp-api-dev" ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    AllowNoTenant:
+      roles:
+        - Admin
+        - InstallationAdmin
+      claims: [ ]
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    # Users
+    BrowseUser:
+      roles:
+        - Admin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    EditUser:
+      roles: []
+      clients: [ "opencdmp-api-dev" ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    DeleteUser:
+      roles: []
+      claims: [ ]
+      clients: [ "opencdmp-api-dev" ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    # UserContactInfo
+    BrowseUserContactInfo:
+      roles:
+        - Admin
+        - InstallationAdmin
+      clients: [ "opencdmp-api-dev" ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    EditUserContactInfo:
+      roles:
+        - Admin
+        - InstallationAdmin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    DeleteUserContactInfo:
+      roles:
+        - Admin
+        - InstallationAdmin
+      claims: [ ]
+      clients: [ "opencdmp-api-dev" ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    #Notification
+    BrowseNotification:
+      roles:
+        - Admin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    EditNotification:
+      roles:
+        - Admin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    DeleteNotification:
+      roles:
+        - Admin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    # TenantConfiguration
+    BrowseTenantConfiguration:
+      roles:
+        - Admin
+        - TenantAdmin
+      claims: [ ]
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    EditTenantConfiguration:
+      roles:
+        - Admin
+        - TenantAdmin
+      clients: [ "opencdmp-api-dev" ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    DeleteTenantConfiguration:
+      roles:
+        - Admin
+        - TenantAdmin
+      clients: [ "opencdmp-api-dev" ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    #User Notification Preference
+    BrowseUserNotificationPreference:
+      roles:
+        - Admin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    EditUserNotificationPreference:
+      roles:
+        - Admin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    
+    # ViewPage Permissions
+    ViewNotificationPage:
+      roles:
+        - Admin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    ViewNotificationEventRulePage:
+      roles:
+        - Admin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    ViewInAppNotificationPage:
+      roles:
+        - Admin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    ViewNotificationTemplatePage:
+      roles:
+        - Admin
+        - TenantAdmin
+        - TenantConfigManager
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+
+    # Notification Template Permissions
+    BrowseNotificationTemplate:
+      roles:
+        - Admin
+        - TenantAdmin
+        - TenantConfigManager
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    EditNotificationTemplate:
+      roles:
+        - Admin
+        - TenantAdmin
+        - TenantConfigManager
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    DeleteNotificationTemplate:
+      roles:
+        - Admin
+        - TenantAdmin
+        - TenantConfigManager
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+
+    # In App Notification Permissions
+    BrowseInAppNotification:
+      roles:
+        - Admin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    DeleteInAppNotification:
+      roles:
+        - Admin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
