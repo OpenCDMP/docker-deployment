@@ -73,7 +73,7 @@ For a straightforward deployment, simply run:
 
 This script pulls necessary images (if not present) and starts the containers in the background. Once finished, you can verify the services are up and running via Docker logs or by visiting the relevant ports in your browser.
 After the containers come up, navigate to `http://host.docker.internal:8081/`.
-More information can be found in the docs here: https://opencdmp.eu/getting-started/installation/
+More information can be found in the docs here: https://opencdmp.github.io/getting-started/deployment/
 
 ---
 
