@@ -25,6 +25,28 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- TOC entry 2 (class 3079 OID 283746)
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
+
+
+--
+-- TOC entry 4085 (class 0 OID 0)
+-- Dependencies: 2
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
+
+
+--
+-- TOC entry 934 (class 1247 OID 283758)
+-- Name: doientitytype; Type: TYPE; Schema: public; Owner: -
+--
+
+--
 -- TOC entry 216 (class 1259 OID 123997)
 -- Name: ActionConfirmation; Type: TABLE; Schema: public; Owner: -
 --
@@ -140,7 +162,7 @@ CREATE TABLE public."DescriptionTag" (
 --
 
 CREATE TABLE public."DescriptionTemplate" (
-    id uuid NOT NULL,
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     label character varying(250) NOT NULL,
     definition xml NOT NULL,
     status smallint DEFAULT 0 NOT NULL,
@@ -156,7 +178,6 @@ CREATE TABLE public."DescriptionTemplate" (
     tenant uuid,
     code character varying(200) NOT NULL
 );
-
 
 --
 -- TOC entry 3897 (class 0 OID 0)
@@ -305,7 +326,7 @@ CREATE TABLE public."Plan" (
 --
 
 CREATE TABLE public."PlanBlueprint" (
-    id uuid NOT NULL,
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     label character varying(250) NOT NULL,
     definition xml,
     status smallint DEFAULT 0 NOT NULL,
@@ -389,7 +410,8 @@ CREATE TABLE public."PlanUser" (
     updated_at timestamp without time zone DEFAULT now() NOT NULL,
     is_active smallint DEFAULT 1 NOT NULL,
     tenant uuid,
-    section_id uuid
+    section_id uuid,
+    ordinal integer NOT NULL
 );
 
 
@@ -418,12 +440,12 @@ CREATE TABLE public."PlanWorkflow" (
 CREATE TABLE public."PrefillingSource" (
     id uuid NOT NULL,
     label character varying(250) NOT NULL,
+    code character varying(100) NOT NULL,
     definition xml NOT NULL,
     is_active smallint NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    tenant uuid,
-    code character varying(100) NOT NULL
+    tenant uuid
 );
 
 
@@ -660,6 +682,7 @@ CREATE TABLE public."UserContactInfo" (
 );
 
 
+
 --
 -- TOC entry 244 (class 1259 OID 124336)
 -- Name: UserCredential; Type: TABLE; Schema: public; Owner: -
@@ -697,7 +720,7 @@ CREATE TABLE public."UserDescriptionTemplate" (
 --
 
 CREATE TABLE public."UserRole" (
-    id uuid NOT NULL,
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     "user" uuid NOT NULL,
     role character varying(512) NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -867,6 +890,7 @@ CREATE TABLE public."ant_TenantUser" (
 );
 
 
+
 --
 -- TOC entry 254 (class 1259 OID 124395)
 -- Name: ant_User; Type: TABLE; Schema: public; Owner: -
@@ -883,7 +907,7 @@ CREATE TABLE public."ant_User" (
 
 
 --
--- TOC entry 255 (class 1259 OID 124403)
+-- TOC entry 262 (class 1259 OID 284013)
 -- Name: ant_UserCredential; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -920,7 +944,7 @@ CREATE TABLE public."ntf_InAppNotification" (
 
 
 --
--- TOC entry 257 (class 1259 OID 124413)
+-- TOC entry 264 (class 1259 OID 284023)
 -- Name: ntf_Notification; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -947,7 +971,7 @@ CREATE TABLE public."ntf_Notification" (
 
 
 --
--- TOC entry 258 (class 1259 OID 124418)
+-- TOC entry 265 (class 1259 OID 284028)
 -- Name: ntf_NotificationTemplate; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -966,7 +990,7 @@ CREATE TABLE public."ntf_NotificationTemplate" (
 
 
 --
--- TOC entry 259 (class 1259 OID 124423)
+-- TOC entry 266 (class 1259 OID 284033)
 -- Name: ntf_QueueInbox; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -988,7 +1012,7 @@ CREATE TABLE public."ntf_QueueInbox" (
 
 
 --
--- TOC entry 260 (class 1259 OID 124428)
+-- TOC entry 267 (class 1259 OID 284038)
 -- Name: ntf_QueueOutbox; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1010,7 +1034,7 @@ CREATE TABLE public."ntf_QueueOutbox" (
 
 
 --
--- TOC entry 261 (class 1259 OID 124433)
+-- TOC entry 268 (class 1259 OID 284043)
 -- Name: ntf_Tenant; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1024,7 +1048,7 @@ CREATE TABLE public."ntf_Tenant" (
 
 
 --
--- TOC entry 262 (class 1259 OID 124439)
+-- TOC entry 269 (class 1259 OID 284049)
 -- Name: ntf_TenantConfiguration; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1040,7 +1064,7 @@ CREATE TABLE public."ntf_TenantConfiguration" (
 
 
 --
--- TOC entry 263 (class 1259 OID 124444)
+-- TOC entry 270 (class 1259 OID 284054)
 -- Name: ntf_TenantUser; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1055,7 +1079,7 @@ CREATE TABLE public."ntf_TenantUser" (
 
 
 --
--- TOC entry 264 (class 1259 OID 124447)
+-- TOC entry 271 (class 1259 OID 284057)
 -- Name: ntf_User; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1070,7 +1094,7 @@ CREATE TABLE public."ntf_User" (
 
 
 --
--- TOC entry 265 (class 1259 OID 124455)
+-- TOC entry 272 (class 1259 OID 284065)
 -- Name: ntf_UserContactInfo; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1087,7 +1111,7 @@ CREATE TABLE public."ntf_UserContactInfo" (
 
 
 --
--- TOC entry 266 (class 1259 OID 124462)
+-- TOC entry 273 (class 1259 OID 284072)
 -- Name: ntf_UserCredential; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1102,7 +1126,7 @@ CREATE TABLE public."ntf_UserCredential" (
 
 
 --
--- TOC entry 267 (class 1259 OID 124467)
+-- TOC entry 274 (class 1259 OID 284077)
 -- Name: ntf_UserNotificationPreference; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1129,7 +1153,7 @@ ALTER TABLE ONLY public."ActionConfirmation"
 
 
 --
--- TOC entry 3548 (class 2606 OID 124490)
+-- TOC entry 3660 (class 2606 OID 290233)
 -- Name: DescriptionTemplate DatasetProfile_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1138,7 +1162,7 @@ ALTER TABLE ONLY public."DescriptionTemplate"
 
 
 --
--- TOC entry 3544 (class 2606 OID 124498)
+-- TOC entry 3654 (class 2606 OID 290235)
 -- Name: DescriptionReference DescriptionReference_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1147,7 +1171,7 @@ ALTER TABLE ONLY public."DescriptionReference"
 
 
 --
--- TOC entry 3650 (class 2606 OID 162371)
+-- TOC entry 3656 (class 2606 OID 290237)
 -- Name: DescriptionStatus DescriptionStatus_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1156,7 +1180,7 @@ ALTER TABLE ONLY public."DescriptionStatus"
 
 
 --
--- TOC entry 3546 (class 2606 OID 124500)
+-- TOC entry 3658 (class 2606 OID 290239)
 -- Name: DescriptionTag DescriptionTag_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1165,7 +1189,7 @@ ALTER TABLE ONLY public."DescriptionTag"
 
 
 --
--- TOC entry 3550 (class 2606 OID 124502)
+-- TOC entry 3662 (class 2606 OID 290241)
 -- Name: DescriptionTemplateType DescriptionTemplateType_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1174,7 +1198,7 @@ ALTER TABLE ONLY public."DescriptionTemplateType"
 
 
 --
--- TOC entry 3654 (class 2606 OID 162396)
+-- TOC entry 3664 (class 2606 OID 290243)
 -- Name: DescriptionWorkflow DescriptionWorkflow_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1183,7 +1207,7 @@ ALTER TABLE ONLY public."DescriptionWorkflow"
 
 
 --
--- TOC entry 3542 (class 2606 OID 124504)
+-- TOC entry 3652 (class 2606 OID 290245)
 -- Name: Description Description_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1192,7 +1216,7 @@ ALTER TABLE ONLY public."Description"
 
 
 --
--- TOC entry 3562 (class 2606 OID 124516)
+-- TOC entry 3666 (class 2606 OID 290247)
 -- Name: EntityDoi Doi_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1201,7 +1225,7 @@ ALTER TABLE ONLY public."EntityDoi"
 
 
 --
--- TOC entry 3656 (class 2606 OID 726253)
+-- TOC entry 3808 (class 2606 OID 723856)
 -- Name: Evaluation Evaluation_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1210,7 +1234,7 @@ ALTER TABLE ONLY public."Evaluation"
 
 
 --
--- TOC entry 3564 (class 2606 OID 124528)
+-- TOC entry 3668 (class 2606 OID 290249)
 -- Name: Language Language_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1219,7 +1243,7 @@ ALTER TABLE ONLY public."Language"
 
 
 --
--- TOC entry 3566 (class 2606 OID 124530)
+-- TOC entry 3670 (class 2606 OID 290251)
 -- Name: Lock Lock_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1228,7 +1252,7 @@ ALTER TABLE ONLY public."Lock"
 
 
 --
--- TOC entry 3622 (class 2606 OID 124536)
+-- TOC entry 3746 (class 2606 OID 290253)
 -- Name: ntf_NotificationTemplate NotificationTemplate_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1237,7 +1261,7 @@ ALTER TABLE ONLY public."ntf_NotificationTemplate"
 
 
 --
--- TOC entry 3634 (class 2606 OID 124538)
+-- TOC entry 3758 (class 2606 OID 290255)
 -- Name: ntf_User Ntf_User_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1246,7 +1270,7 @@ ALTER TABLE ONLY public."ntf_User"
 
 
 --
--- TOC entry 3554 (class 2606 OID 124482)
+-- TOC entry 3674 (class 2606 OID 290257)
 -- Name: PlanBlueprint PlanBlueprint_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1255,7 +1279,7 @@ ALTER TABLE ONLY public."PlanBlueprint"
 
 
 --
--- TOC entry 3556 (class 2606 OID 124506)
+-- TOC entry 3676 (class 2606 OID 290259)
 -- Name: PlanDescriptionTemplate PlanDescriptionTemplate_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1264,7 +1288,7 @@ ALTER TABLE ONLY public."PlanDescriptionTemplate"
 
 
 --
--- TOC entry 3558 (class 2606 OID 124508)
+-- TOC entry 3678 (class 2606 OID 290261)
 -- Name: PlanReference PlanReference_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1273,7 +1297,7 @@ ALTER TABLE ONLY public."PlanReference"
 
 
 --
--- TOC entry 3648 (class 2606 OID 162359)
+-- TOC entry 3680 (class 2606 OID 290263)
 -- Name: PlanStatus PlanStatus_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1282,7 +1306,7 @@ ALTER TABLE ONLY public."PlanStatus"
 
 
 --
--- TOC entry 3560 (class 2606 OID 124510)
+-- TOC entry 3682 (class 2606 OID 290265)
 -- Name: PlanUser PlanUser_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1291,7 +1315,7 @@ ALTER TABLE ONLY public."PlanUser"
 
 
 --
--- TOC entry 3652 (class 2606 OID 162383)
+-- TOC entry 3684 (class 2606 OID 290267)
 -- Name: PlanWorkflow PlanWorkflow_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1300,7 +1324,7 @@ ALTER TABLE ONLY public."PlanWorkflow"
 
 
 --
--- TOC entry 3552 (class 2606 OID 124512)
+-- TOC entry 3672 (class 2606 OID 290269)
 -- Name: Plan Plan_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1309,7 +1333,7 @@ ALTER TABLE ONLY public."Plan"
 
 
 --
--- TOC entry 3568 (class 2606 OID 124552)
+-- TOC entry 3686 (class 2606 OID 290271)
 -- Name: PrefillingSource PrefillingSource_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1318,7 +1342,7 @@ ALTER TABLE ONLY public."PrefillingSource"
 
 
 --
--- TOC entry 3570 (class 2606 OID 124556)
+-- TOC entry 3688 (class 2606 OID 290273)
 -- Name: QueueInbox QueryInbox_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1327,7 +1351,7 @@ ALTER TABLE ONLY public."QueueInbox"
 
 
 --
--- TOC entry 3572 (class 2606 OID 124558)
+-- TOC entry 3690 (class 2606 OID 290275)
 -- Name: QueueOutbox QueueOutbox_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1336,7 +1360,7 @@ ALTER TABLE ONLY public."QueueOutbox"
 
 
 --
--- TOC entry 3576 (class 2606 OID 124560)
+-- TOC entry 3694 (class 2606 OID 290277)
 -- Name: ReferenceType ReferenceType_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1345,7 +1369,7 @@ ALTER TABLE ONLY public."ReferenceType"
 
 
 --
--- TOC entry 3574 (class 2606 OID 124562)
+-- TOC entry 3692 (class 2606 OID 290279)
 -- Name: Reference Reference_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1354,7 +1378,7 @@ ALTER TABLE ONLY public."Reference"
 
 
 --
--- TOC entry 3578 (class 2606 OID 124566)
+-- TOC entry 3696 (class 2606 OID 290281)
 -- Name: StorageFile StorageFile_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1363,7 +1387,7 @@ ALTER TABLE ONLY public."StorageFile"
 
 
 --
--- TOC entry 3580 (class 2606 OID 124568)
+-- TOC entry 3698 (class 2606 OID 290283)
 -- Name: SupportiveMaterial SupportiveMaterial_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1372,7 +1396,7 @@ ALTER TABLE ONLY public."SupportiveMaterial"
 
 
 --
--- TOC entry 3582 (class 2606 OID 124570)
+-- TOC entry 3700 (class 2606 OID 290285)
 -- Name: Tag Tag_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1381,7 +1405,7 @@ ALTER TABLE ONLY public."Tag"
 
 
 --
--- TOC entry 3586 (class 2606 OID 124572)
+-- TOC entry 3704 (class 2606 OID 290287)
 -- Name: TenantConfiguration TenantConfiguration_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1390,7 +1414,7 @@ ALTER TABLE ONLY public."TenantConfiguration"
 
 
 --
--- TOC entry 3588 (class 2606 OID 124574)
+-- TOC entry 3706 (class 2606 OID 290289)
 -- Name: TenantUser TenantUser_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1399,7 +1423,7 @@ ALTER TABLE ONLY public."TenantUser"
 
 
 --
--- TOC entry 3584 (class 2606 OID 124576)
+-- TOC entry 3702 (class 2606 OID 290291)
 -- Name: Tenant Tenant_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1408,7 +1432,7 @@ ALTER TABLE ONLY public."Tenant"
 
 
 --
--- TOC entry 3646 (class 2606 OID 151348)
+-- TOC entry 3708 (class 2606 OID 290293)
 -- Name: UsageLimit UsageLimit_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1417,7 +1441,7 @@ ALTER TABLE ONLY public."UsageLimit"
 
 
 --
--- TOC entry 3592 (class 2606 OID 124578)
+-- TOC entry 3712 (class 2606 OID 290295)
 -- Name: UserContactInfo UserContactInfo_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1426,7 +1450,7 @@ ALTER TABLE ONLY public."UserContactInfo"
 
 
 --
--- TOC entry 3594 (class 2606 OID 124580)
+-- TOC entry 3714 (class 2606 OID 290297)
 -- Name: UserCredential UserCredential_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1435,7 +1459,7 @@ ALTER TABLE ONLY public."UserCredential"
 
 
 --
--- TOC entry 3596 (class 2606 OID 124582)
+-- TOC entry 3716 (class 2606 OID 290299)
 -- Name: UserDescriptionTemplate UserDatasetProfile_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1444,7 +1468,7 @@ ALTER TABLE ONLY public."UserDescriptionTemplate"
 
 
 --
--- TOC entry 3598 (class 2606 OID 124588)
+-- TOC entry 3718 (class 2606 OID 290301)
 -- Name: UserRole UserRole_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1453,7 +1477,7 @@ ALTER TABLE ONLY public."UserRole"
 
 
 --
--- TOC entry 3590 (class 2606 OID 124592)
+-- TOC entry 3710 (class 2606 OID 290303)
 -- Name: User User_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1462,7 +1486,7 @@ ALTER TABLE ONLY public."User"
 
 
 --
--- TOC entry 3644 (class 2606 OID 150488)
+-- TOC entry 3724 (class 2606 OID 290305)
 -- Name: ant_AnnotationStatus ant_AnnotationStatus_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1471,7 +1495,7 @@ ALTER TABLE ONLY public."ant_AnnotationStatus"
 
 
 --
--- TOC entry 3602 (class 2606 OID 124594)
+-- TOC entry 3722 (class 2606 OID 290307)
 -- Name: ant_Annotation ant_Annotation_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1480,7 +1504,7 @@ ALTER TABLE ONLY public."ant_Annotation"
 
 
 --
--- TOC entry 3604 (class 2606 OID 124596)
+-- TOC entry 3726 (class 2606 OID 290309)
 -- Name: ant_EntityUser ant_EntityUser_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1489,7 +1513,7 @@ ALTER TABLE ONLY public."ant_EntityUser"
 
 
 --
--- TOC entry 3606 (class 2606 OID 124598)
+-- TOC entry 3728 (class 2606 OID 290311)
 -- Name: ant_QueueInbox ant_QueryInbox_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1498,7 +1522,7 @@ ALTER TABLE ONLY public."ant_QueueInbox"
 
 
 --
--- TOC entry 3608 (class 2606 OID 124600)
+-- TOC entry 3730 (class 2606 OID 290313)
 -- Name: ant_QueueOutbox ant_QueueOutbox_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1507,7 +1531,7 @@ ALTER TABLE ONLY public."ant_QueueOutbox"
 
 
 --
--- TOC entry 3642 (class 2606 OID 150478)
+-- TOC entry 3732 (class 2606 OID 290315)
 -- Name: ant_Status ant_Status_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1516,7 +1540,7 @@ ALTER TABLE ONLY public."ant_Status"
 
 
 --
--- TOC entry 3612 (class 2606 OID 124602)
+-- TOC entry 3736 (class 2606 OID 290317)
 -- Name: ant_TenantUser ant_TenantUser_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1525,7 +1549,7 @@ ALTER TABLE ONLY public."ant_TenantUser"
 
 
 --
--- TOC entry 3610 (class 2606 OID 124604)
+-- TOC entry 3734 (class 2606 OID 290319)
 -- Name: ant_Tenant ant_Tenant_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1534,7 +1558,7 @@ ALTER TABLE ONLY public."ant_Tenant"
 
 
 --
--- TOC entry 3616 (class 2606 OID 124606)
+-- TOC entry 3740 (class 2606 OID 290321)
 -- Name: ant_UserCredential ant_UserCredential_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1543,7 +1567,7 @@ ALTER TABLE ONLY public."ant_UserCredential"
 
 
 --
--- TOC entry 3614 (class 2606 OID 124608)
+-- TOC entry 3738 (class 2606 OID 290323)
 -- Name: ant_User ant_User_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1561,7 +1585,7 @@ ALTER TABLE ONLY public."ntf_InAppNotification"
 
 
 --
--- TOC entry 3620 (class 2606 OID 124612)
+-- TOC entry 3744 (class 2606 OID 290327)
 -- Name: ntf_Notification ntf_Notification_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1570,7 +1594,7 @@ ALTER TABLE ONLY public."ntf_Notification"
 
 
 --
--- TOC entry 3624 (class 2606 OID 124614)
+-- TOC entry 3748 (class 2606 OID 290329)
 -- Name: ntf_QueueInbox ntf_QueryInbox_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1579,7 +1603,7 @@ ALTER TABLE ONLY public."ntf_QueueInbox"
 
 
 --
--- TOC entry 3626 (class 2606 OID 124616)
+-- TOC entry 3750 (class 2606 OID 290331)
 -- Name: ntf_QueueOutbox ntf_QueueOutbox_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1588,7 +1612,7 @@ ALTER TABLE ONLY public."ntf_QueueOutbox"
 
 
 --
--- TOC entry 3630 (class 2606 OID 124618)
+-- TOC entry 3754 (class 2606 OID 290333)
 -- Name: ntf_TenantConfiguration ntf_TenantConfguration_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1597,7 +1621,7 @@ ALTER TABLE ONLY public."ntf_TenantConfiguration"
 
 
 --
--- TOC entry 3632 (class 2606 OID 124620)
+-- TOC entry 3756 (class 2606 OID 290335)
 -- Name: ntf_TenantUser ntf_TenantUser_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1606,7 +1630,7 @@ ALTER TABLE ONLY public."ntf_TenantUser"
 
 
 --
--- TOC entry 3628 (class 2606 OID 124622)
+-- TOC entry 3752 (class 2606 OID 290337)
 -- Name: ntf_Tenant ntf_Tenant_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1615,7 +1639,7 @@ ALTER TABLE ONLY public."ntf_Tenant"
 
 
 --
--- TOC entry 3636 (class 2606 OID 124624)
+-- TOC entry 3760 (class 2606 OID 290339)
 -- Name: ntf_UserContactInfo ntf_UserContactInfo_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1624,7 +1648,7 @@ ALTER TABLE ONLY public."ntf_UserContactInfo"
 
 
 --
--- TOC entry 3638 (class 2606 OID 124626)
+-- TOC entry 3762 (class 2606 OID 290341)
 -- Name: ntf_UserCredential ntf_UserCredential_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1633,7 +1657,7 @@ ALTER TABLE ONLY public."ntf_UserCredential"
 
 
 --
--- TOC entry 3640 (class 2606 OID 124628)
+-- TOC entry 3764 (class 2606 OID 290343)
 -- Name: ntf_UserNotificationPreference ntf_UserNotificationPreference_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 

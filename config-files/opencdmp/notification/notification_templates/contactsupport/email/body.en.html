@@ -1,14 +1,73 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Simple Transactional Email</title>
-</head>
-<body class="">
-{description}
-<br/>
-<br/>
-Send by user: {email}
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-widthm initial-scale=1.0">
+        <title>OpenCDMP Email</title>
+        <style>
+            @media only screen and (max-width: 620px) {
+                table {
+                    width: 100%;
+                }
+                .main-btn {
+                    height: 36px;
+                }
+                .main-btn-content {
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+            }
+
+            @media only screen {
+                .logo {
+                    margin-top: -2px;
+                    margin-left: -3px;
+                }
+            }
+        </style>
+    </head>
+    <body bgcolor="#f5f5f5" style="font-family:Roboto,sans-serif; background-color:#f5f5f5; color: #666666; font-size:16px; line-height: 1.4;">
+        <table align="center">
+            <tbody>
+                <tr >
+                    <td style="background-color:#ffffff;">
+                        <table cellspacing="24">
+                            <tr>
+                                <td>
+                                    <img src="https://test.opendmp.eu/assets/images/nav-logo.svg"
+                                        class="logo" 
+                                        width="174" 
+                                        height="46" 
+                                        alt="CDMP Logo" 
+                                        title="CDMP Logo" 
+                                        align="texttop"
+                                    >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p>
+                                        <b style="color: #212121">{description}</b>
+                                    </p>
+                                    <p style="color: #666666">Sent by user: <b style="color: #212121">{email}</b></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style=" border-top:1px solid #e5e5e5;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 14px">
+                                    <span>
+                                        This email was generated automaticaly. Please do not reply to this email.<br/>
+                                        &#169;OpenCDMP 2024. All rights reserved.
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
 </html>

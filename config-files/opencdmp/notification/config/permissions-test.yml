@@ -10,13 +10,13 @@ permissions:
       allowAuthenticated: false
     EditTenant:
       roles: []
-      clients: [ "opencdmp-api-dev" ]
+      clients: [ "opencdmp-api-test" ]
       allowAnonymous: false
       allowAuthenticated: false
     DeleteTenant:
       roles: []
       claims: [ ]
-      clients: [ "opencdmp-api-dev" ]
+      clients: [ "opencdmp-api-test" ]
       allowAnonymous: false
       allowAuthenticated: false
     AllowNoTenant:
@@ -36,13 +36,13 @@ permissions:
       allowAuthenticated: false
     EditUser:
       roles: []
-      clients: [ "opencdmp-api-dev" ]
+      clients: [ "opencdmp-api-test" ]
       allowAnonymous: false
       allowAuthenticated: false
     DeleteUser:
       roles: []
       claims: [ ]
-      clients: [ "opencdmp-api-dev" ]
+      clients: [ "opencdmp-api-test" ]
       allowAnonymous: false
       allowAuthenticated: false
     # UserContactInfo
@@ -50,7 +50,7 @@ permissions:
       roles:
         - Admin
         - InstallationAdmin
-      clients: [ "opencdmp-api-dev" ]
+      clients: [ "opencdmp-api-test" ]
       allowAnonymous: false
       allowAuthenticated: false
     EditUserContactInfo:
@@ -65,7 +65,7 @@ permissions:
         - Admin
         - InstallationAdmin
       claims: [ ]
-      clients: [ "opencdmp-api-dev" ]
+      clients: [ "opencdmp-api-test" ]
       allowAnonymous: false
       allowAuthenticated: false
     #Notification
@@ -100,14 +100,14 @@ permissions:
       roles:
         - Admin
         - TenantAdmin
-      clients: [ "opencdmp-api-dev" ]
+      clients: [ "opencdmp-api-test" ]
       allowAnonymous: false
       allowAuthenticated: false
     DeleteTenantConfiguration:
       roles:
         - Admin
         - TenantAdmin
-      clients: [ "opencdmp-api-dev" ]
+      clients: [ "opencdmp-api-test" ]
       allowAnonymous: false
       allowAuthenticated: false
     #User Notification Preference

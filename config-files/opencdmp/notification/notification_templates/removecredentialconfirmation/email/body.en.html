@@ -1,304 +1,97 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-  <meta name="viewport" content="width=device-width" />
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>Simple Transactional Email</title>
-  <style>
-    /* -------------------------------------
-        GLOBAL RESETS
-    ------------------------------------- */
-    img {
-      border: none;
-      -ms-interpolation-mode: bicubic;
-      max-width: 100%; }
-    body {
-      background-color: #f6f6f6;
-      font-family: sans-serif;
-      -webkit-font-smoothing: antialiased;
-      font-size: 14px;
-      line-height: 1.4;
-      margin: 0;
-      padding: 0;
-      -ms-text-size-adjust: 100%;
-      -webkit-text-size-adjust: 100%; }
-    table {
-      border-collapse: separate;
-      mso-table-lspace: 0pt;
-      mso-table-rspace: 0pt;
-      width: 100%; }
-    table td {
-      font-family: sans-serif;
-      font-size: 14px;
-      vertical-align: top; }
-    /* -------------------------------------
-        BODY & CONTAINER
-    ------------------------------------- */
-    .body {
-      background-color: #f6f6f6;
-      width: 100%; }
-    /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
-    .container {
-      display: block;
-      Margin: 0 auto !important;
-      /* makes it centered */
-      max-width: 580px;
-      padding: 10px;
-      width: 580px; }
-    /* This should also be a block element, so that it will fill 100% of the .container */
-    .content {
-      box-sizing: border-box;
-      display: block;
-      Margin: 0 auto;
-      max-width: 580px;
-      padding: 10px; }
-    /* -------------------------------------
-        HEADER, FOOTER, MAIN
-    ------------------------------------- */
-    .main {
-      background: #ffffff;
-      border-radius: 3px;
-      width: 100%; }
-    .wrapper {
-      box-sizing: border-box;
-      padding: 20px; }
-    .content-block {
-      padding-bottom: 10px;
-      padding-top: 10px;
-    }
-    .footer {
-      clear: both;
-      Margin-top: 10px;
-      text-align: center;
-      width: 100%; }
-    .footer td,
-    .footer p,
-    .footer span,
-    .footer a {
-      color: #999999;
-      font-size: 12px;
-      text-align: center; }
-    /* -------------------------------------
-        TYPOGRAPHY
-    ------------------------------------- */
-    h1,
-    h2,
-    h3,
-    h4 {
-      color: #000000;
-      font-family: sans-serif;
-      font-weight: 400;
-      line-height: 1.4;
-      margin: 0;
-      Margin-bottom: 30px; }
-    h1 {
-      font-size: 35px;
-      font-weight: 300;
-      text-align: center;
-      text-transform: capitalize; }
-    p,
-    ul,
-    ol {
-      font-family: sans-serif;
-      font-size: 14px;
-      font-weight: normal;
-      margin: 0;
-      Margin-bottom: 15px; }
-    p li,
-    ul li,
-    ol li {
-      list-style-position: inside;
-      margin-left: 5px; }
-    a {
-      color: #3498db;
-      text-decoration: underline; }
-    /* -------------------------------------
-        BUTTONS
-    ------------------------------------- */
-    .btn {
-      box-sizing: border-box;
-      width: 100%; }
-    .btn > tbody > tr > td {
-      padding-bottom: 15px; }
-    .btn table {
-      width: auto; }
-    .btn table td {
-      background-color: #ffffff;
-      border-radius: 5px;
-      text-align: center; }
-    .btn a {
-      background-color: #ffffff;
-      border: solid 1px #3498db;
-      border-radius: 5px;
-      box-sizing: border-box;
-      color: #3498db;
-      cursor: pointer;
-      display: inline-block;
-      font-size: 14px;
-      font-weight: bold;
-      margin: 0;
-      padding: 12px 25px;
-      text-decoration: none;
-      text-transform: capitalize; }
-    .btn-primary table td {
-      background-color: #3498db; }
-    .btn-primary a {
-      background-color: #3498db;
-      border-color: #3498db;
-      color: #ffffff; }
-    /* -------------------------------------
-        OTHER STYLES THAT MIGHT BE USEFUL
-    ------------------------------------- */
-    .last {
-      margin-bottom: 0; }
-    .first {
-      margin-top: 0; }
-    .align-center {
-      text-align: center; }
-    .align-right {
-      text-align: right; }
-    .align-left {
-      text-align: left; }
-    .clear {
-      clear: both; }
-    .mt0 {
-      margin-top: 0; }
-    .mb0 {
-      margin-bottom: 0; }
-    .preheader {
-      color: transparent;
-      display: none;
-      height: 0;
-      max-height: 0;
-      max-width: 0;
-      opacity: 0;
-      overflow: hidden;
-      mso-hide: all;
-      visibility: hidden;
-      width: 0; }
-    .powered-by a {
-      text-decoration: none; }
-    hr {
-      border: 0;
-      border-bottom: 1px solid #f6f6f6;
-      Margin: 20px 0; }
-    /* -------------------------------------
-        RESPONSIVE AND MOBILE FRIENDLY STYLES
-    ------------------------------------- */
-    @media only screen and (max-width: 620px) {
-      table[class=body] h1 {
-        font-size: 28px !important;
-        margin-bottom: 10px !important; }
-      table[class=body] p,
-      table[class=body] ul,
-      table[class=body] ol,
-      table[class=body] td,
-      table[class=body] span,
-      table[class=body] a {
-        font-size: 16px !important; }
-      table[class=body] .wrapper,
-      table[class=body] .article {
-        padding: 10px !important; }
-      table[class=body] .content {
-        padding: 0 !important; }
-      table[class=body] .container {
-        padding: 0 !important;
-        width: 100% !important; }
-      table[class=body] .main {
-        border-left-width: 0 !important;
-        border-radius: 0 !important;
-        border-right-width: 0 !important; }
-      table[class=body] .btn table {
-        width: 100% !important; }
-      table[class=body] .btn a {
-        width: 100% !important; }
-      table[class=body] .img-responsive {
-        height: auto !important;
-        max-width: 100% !important;
-        width: auto !important; }}
-    /* -------------------------------------
-        PRESERVE THESE STYLES IN THE HEAD
-    ------------------------------------- */
-    @media all {
-      .ExternalClass {
-        width: 100%; }
-      .ExternalClass,
-      .ExternalClass p,
-      .ExternalClass span,
-      .ExternalClass font,
-      .ExternalClass td,
-      .ExternalClass div {
-        line-height: 100%; }
-      .apple-link a {
-        color: inherit !important;
-        font-family: inherit !important;
-        font-size: inherit !important;
-        font-weight: inherit !important;
-        line-height: inherit !important;
-        text-decoration: none !important; }
-      .btn-primary table td:hover {
-        background-color: #34495e !important; }
-      .btn-primary a:hover {
-        background-color: #34495e !important;
-        border-color: #34495e !important; } }
-  </style>
-</head>
-<body class="">
-<table border="0" cellpadding="0" cellspacing="0" class="body">
-  <tr>
-    <td>&nbsp;</td>
-    <td class="container">
-      <div class="content">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-widthm initial-scale=1.0">
+        <title>OpenCDMP Email</title>
+        <style>
+            @media only screen and (max-width: 620px) {
+                table {
+                    width: 100%;
+                }
+                .main-btn {
+                    height: 36px;
+                }
+                .main-btn-content {
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+            }
 
-        <!-- START CENTERED WHITE CONTAINER -->
-        <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
-        <table class="main">
-
-          <!-- START MAIN CONTENT AREA -->
-          <tr>
-            <td class="wrapper">
-              <table border="0" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td>
-                    <img src="data:image/png;base64,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" alt="OpenCDMP" width="100" height="81">
-                    <h2>You have made a request to unlink your email account in OpenCDMP.</h2>
-                    <p>Please confirm that you want to unlink your {email} account.
-                      <br/>The link will expire in {expiration_time}.</p>
-                    <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
-                      <tbody>
-                      <tr>
-                        <td align="left">
-                          <table border="0" cellpadding="0" cellspacing="0">
-                            <tbody>
+            @media only screen {
+                .logo {
+                    margin-top: -2px;
+                    margin-left: -3px;
+                }
+            }
+        </style>
+    </head>
+    <body bgcolor="#f5f5f5" style="font-family:Roboto,sans-serif; background-color:#f5f5f5; color: #666666; font-size:16px; line-height: 1.4;">
+        <table align="center">
+            <tbody>
+                <tr >
+                    <td style="background-color:#ffffff;">
+                        <table cellspacing="24">
                             <tr>
-                              <td> <a href="{installation-url}/unlink/confirmation/{confirmationToken}" target="_blank">Confirm Unlink Request</a> </td>
+                                <td>
+                                    <img src="https://test.opendmp.eu/assets/images/nav-logo.svg"
+                                        class="logo" 
+                                        width="174" 
+                                        height="46" 
+                                        alt="CDMP Logo" 
+                                        title="CDMP Logo" 
+                                        align="texttop"
+                                    >
+                                </td>
                             </tr>
-                            </tbody>
-                          </table>
-                        </td>
-                      </tr>
-                      </tbody>
-                    </table>
-                  </td>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <span>
+                                                    Dear <b style="color: #212121">{recipient}</b>,
+                                                </span>
+                                                <p style="color: #666666">
+                                                    You have made a request to unlink your email account in OpenCDMP.
+                                                </p>
+                                                <p style="color: #666666">Please confirm that you want to unlink your <b style="color: #212121">{email}</b> account.<br/>
+                                                    The link will expire in <b style="color: #212121">{expiration_time}</b>.
+                                                </p>
+                                                <table cellpadding="10" class="main-btn" style="background-color:#266edb; border-radius:24px; box-shadow: 0px 4px 4px 0px #0000001f">
+						                            <tr>
+                                                        <td width="24" height="10"></td>
+                                                        <td>
+                                                            <a class="main-btn-content" href="{installation-url}/login/unlink/confirmation/{confirmationToken}" target="_blank" 
+                                                                style="text-decoration:none; color:white; display: block; width: max-content; font-weight: bold;"
+                                                            >                                                               
+                                                                Confirm Unlink Request
+                                                            </a>
+                                                        </td>
+                                                        <td width="24" height="10"></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style=" border-top:1px solid #e5e5e5;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 14px">
+                                    <span>
+                                        This email was generated automaticaly. Please do not reply to this email.<br/>
+                                        &#169;OpenCDMP 2024. All rights reserved.
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- END MAIN CONTENT AREA -->
+            </tbody>
         </table>
-
-        <!-- START FOOTER -->
-        <div class="footer">
-
-        </div>
-        <!-- END FOOTER -->
-
-        <!-- END CENTERED WHITE CONTAINER -->
-      </div>
-    </td>
-    <td>&nbsp;</td>
-  </tr>
-</table>
-</body>
+    </body>
 </html>

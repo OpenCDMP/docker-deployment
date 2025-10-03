@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-widthm initial-scale=1.0">
+        <title>OpenCDMP Email</title>
+        <style>
+            @media only screen and (max-width: 620px) {
+                table {
+                    width: 100%;
+                }
+                .main-btn {
+                    height: 36px;
+                }
+                .main-btn-content {
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+            }
+
+            @media only screen {
+                .logo {
+                    margin-top: -2px;
+                    margin-left: -3px;
+                }
+            }
+        </style>
+    </head>
+    <body bgcolor="#f5f5f5" style="font-family:Roboto,sans-serif; background-color:#f5f5f5; color: #666666; font-size:16px; line-height: 1.4;">
+        <table align="center">
+            <tbody>
+                <tr >
+                    <td style="background-color:#ffffff;">
+                        <table cellspacing="24">
+                            <tr>
+                                <td>
+                                    <img src="https://test.opendmp.eu/assets/images/nav-logo.svg"
+                                        class="logo" 
+                                        width="174" 
+                                        height="46" 
+                                        alt="CDMP Logo" 
+                                        title="CDMP Logo" 
+                                        align="texttop"
+                                    >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <span>
+                                                    Dear <b style="color: #212121">{recipient}</b>,
+                                                </span>
+                                                <p style="color: #666666">
+                                                    <b style="color: #212121">{reasonName}</b> made a comment on the Plan <b style="color: #212121">{name}</b>.
+                                                </p>
+                                                <table cellpadding="10" class="main-btn" style="background-color:#266edb; border-radius:24px; box-shadow: 0px 4px 4px 0px #0000001f">
+						                            <tr>
+                                                        <td width="24" height="10"></td>
+                                                        <td>
+                                                            <a class="main-btn-content" href="{installation-url}{tenant-url-path}/plans/edit/{id}/{anchor}" target="_blank" 
+                                                                style="text-decoration:none; color:white; display: block; width: max-content; font-weight: bold;"
+                                                            >                                                               
+                                                                Click here to view it
+                                                            </a>
+                                                        </td>
+                                                        <td width="24" height="10"></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style=" border-top:1px solid #e5e5e5;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 14px">
+                                    <span>
+                                        This email was generated automaticaly. Please do not reply to this email.<br/>
+                                        &#169;OpenCDMP 2024. All rights reserved.
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

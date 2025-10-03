@@ -17,13 +17,13 @@ permissions:
       allowAuthenticated: false
     EditTenant:
       roles: [ ]
-      clients: [ "opencdmp-api-dev" ]
+      clients: [ "opencdmp-api-test" ]
       allowAnonymous: false
       allowAuthenticated: false
     DeleteTenant:
       roles: [ ]
       claims: [ ]
-      clients: [ "opencdmp-api-dev" ]
+      clients: [ "opencdmp-api-test" ]
       allowAnonymous: false
       allowAuthenticated: false
     AllowNoTenant:
@@ -43,13 +43,13 @@ permissions:
       allowAuthenticated: false
     EditUser:
       roles: [ ]
-      clients: [ "opencdmp-api-dev" ]
+      clients: [ "opencdmp-api-test" ]
       allowAnonymous: false
       allowAuthenticated: false
     DeleteUser:
       roles: [ ]
       claims: [ ]
-      clients: [ "opencdmp-api-dev" ]
+      clients: [ "opencdmp-api-test" ]
       allowAnonymous: false
       allowAuthenticated: false
     #Annotation

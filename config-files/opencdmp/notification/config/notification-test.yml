@@ -1,6 +1,6 @@
 notification:
   staticFields:
-    fields: 
+    fields:
       - key: "{installation-url}"
         type: "String"
         value: "http://host.docker.internal:8081"
@@ -18,6 +18,9 @@ notification:
       - #planFinalised
         type: 90DB0B46-42DE-BD89-AEBF-6F27EFEB256E
         contacts: [ inapp, email ]
+      - #planStatusChanged
+        type: 25bbc307-4fa8-4381-b2d7-a3395f57d575
+        contacts: [ inapp, email ]
       - #planAnnotationCreated
         type: 1cca80f5-2ea9-41ae-a204-9b4332216c24
         contacts: [ inapp, email ]
@@ -32,6 +35,9 @@ notification:
         contacts: [ inapp, email ]
       - #descriptionFinalised
         type: 33790bad-94d4-488a-8ee2-7f6295ca18ea
+        contacts: [ inapp, email ]
+      - #descriptionStatusChanged
+        type: 8389aca8-43bd-4aac-958d-24daf6ed47b4
         contacts: [ inapp, email ]
       - #descriptionAnnotationCreated
         type: db1e99d2-a240-4e75-9bb2-ef25b234c1f0
@@ -63,16 +69,28 @@ notification:
       - #tenantSpecificInvitationExistingUserType
         type: b3809c17-d1e4-420a-919c-828564114191
         contacts: [ inapp, email ]
+      - #planEvaluation
+        type: 1900d73a-6ee4-455a-ab86-58f5749b85d8
+        contacts: [ inapp, email ]
+      - #descriptionEvaluation
+        type: 709b2cc8-24fa-4b9c-9bad-cfd3c6dc4037
+        contacts: [ inapp, email ]
+      - #taggedPlanAnnotationCreated
+        type: f58c8ca3-76eb-40d6-ac3b-2aa99aaa2b27
+        contacts: [ inapp, email ]
+      - #taggedDescriptionAnnotationCreated
+        type: f1b49a19-51c6-4275-9af8-2b64d701b997
+        contacts: [ inapp, email ]
   message:
     email:
       flows:
         - #planInvitationExternalUser
           key: 065DEECD-21BB-44AF-9983-E660FDF24BC4
-          subject-path: /notification_templates/planinvitationexternaluser/email/subject.{language}.txt
+          subject-path: file:/notification_templates/planinvitationexternaluser/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/planinvitationexternaluser/email/body.{language}.html
+          body-path: file:/notification_templates/planinvitationexternaluser/email/body.{language}.html
           body-field-options:
             mandatory: [ "{planname}", "{planrole}", "{installation-url}", "{confirmationToken}" ]
             optional:
@@ -93,11 +111,11 @@ notification:
           cipher-fields: [ ]
         - #planInvitationExistingUser
           key: 4904dea2-5079-46d3-83be-3a19c9ab45dc
-          subject-path: /notification_templates/planinvitationexistinguser/email/subject.{language}.txt
+          subject-path: file:/notification_templates/planinvitationexistinguser/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/planinvitationexistinguser/email/body.{language}.html
+          body-path: file:/notification_templates/planinvitationexistinguser/email/body.{language}.html
           body-field-options:
             mandatory: [ "{planname}", "{planrole}", "{reasonName}", "{installation-url}", "{id}"]
             optional:
@@ -119,11 +137,11 @@ notification:
           cipher-fields: [ ]
         - #planModified
           key: 4542262A-22F8-4BAA-9DB6-1C8E70AC1DBB
-          subject-path: /notification_templates/planmodified/email/subject.{language}.txt
+          subject-path: file:/notification_templates/planmodified/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/planmodified/email/body.{language}.html
+          body-path: file:/notification_templates/planmodified/email/body.{language}.html
           body-field-options:
             mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}" ]
             optional:
@@ -144,11 +162,11 @@ notification:
           cipher-fields: [ ]
         - #planFinalised
           key: 90DB0B46-42DE-BD89-AEBF-6F27EFEB256E
-          subject-path: /notification_templates/planfinalised/email/subject.{language}.txt
+          subject-path: file:/notification_templates/planfinalised/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/planfinalised/email/body.{language}.html
+          body-path: file:/notification_templates/planfinalised/email/body.{language}.html
           body-field-options:
             mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}" ]
             optional:
@@ -167,13 +185,38 @@ notification:
           bcc-mode: 0
           allow-attachments: false
           cipher-fields: [ ]
-        - #planAnnotationCreated
-          key: 1cca80f5-2ea9-41ae-a204-9b4332216c24
-          subject-path: /notification_templates/planannotationcreated/email/subject.{language}.txt
+        - #planStatusChanged
+          key: 25bbc307-4fa8-4381-b2d7-a3395f57d575
+          subject-path: file:/notification_templates/planstatuschanged/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/planannotationcreated/email/body.{language}.html
+          body-path: file:/notification_templates/planstatuschanged/email/body.{language}.html
+          body-field-options:
+            mandatory: [ "{reasonName}", "{name}", "{statusName}", "{installation-url}", "{id}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{reasonName}]': null
+              '[{name}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
+        - #planAnnotationCreated
+          key: 1cca80f5-2ea9-41ae-a204-9b4332216c24
+          subject-path: file:/notification_templates/planannotationcreated/email/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/planannotationcreated/email/body.{language}.html
           body-field-options:
             mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}", "{anchor}" ]
             optional:
@@ -194,11 +237,11 @@ notification:
           cipher-fields: [ ]
         - #planAnnotationStatusChanged
           key: 0c8a5c62-e48f-4eca-99ee-a7f262477061
-          subject-path: /notification_templates/planannotationstatuschanged/email/subject.{language}.txt
+          subject-path: file:/notification_templates/planannotationstatuschanged/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/planannotationstatuschanged/email/body.{language}.html
+          body-path: file:/notification_templates/planannotationstatuschanged/email/body.{language}.html
           body-field-options:
             mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}", "{anchor}", "{status}" ]
             optional:
@@ -220,11 +263,11 @@ notification:
           cipher-fields: [ ]
         - #desriptionCreated
           key: 8965b1d5-99a6-4acf-9016-c0d0ce341364
-          subject-path: /notification_templates/descriptioncreated/email/subject.{language}.txt
+          subject-path: file:/notification_templates/descriptioncreated/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/descriptioncreated/email/body.{language}.html
+          body-path: file:/notification_templates/descriptioncreated/email/body.{language}.html
           body-field-options:
             mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}" ]
             optional:
@@ -245,11 +288,11 @@ notification:
           cipher-fields: [ ]
         - #desriptionModified
           key: 4FDBFA80-7A71-4A69-B854-67CBB70648F1
-          subject-path: /notification_templates/descriptionmodified/email/subject.{language}.txt
+          subject-path: file:/notification_templates/descriptionmodified/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/descriptionmodified/email/body.{language}.html
+          body-path: file:/notification_templates/descriptionmodified/email/body.{language}.html
           body-field-options:
             mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}" ]
             optional:
@@ -270,11 +313,11 @@ notification:
           cipher-fields: [ ]
         - #descriptionFinalised
           key: 33790bad-94d4-488a-8ee2-7f6295ca18ea
-          subject-path: /notification_templates/descriptionfinalised/email/subject.{language}.txt
+          subject-path: file:/notification_templates/descriptionfinalised/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/descriptionfinalised/email/body.{language}.html
+          body-path: file:/notification_templates/descriptionfinalised/email/body.{language}.html
           body-field-options:
             mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}" ]
             optional:
@@ -293,15 +336,15 @@ notification:
           bcc-mode: 0
           allow-attachments: false
           cipher-fields: [ ]
-        - #descriptionAnnotationCreated
-          key: db1e99d2-a240-4e75-9bb2-ef25b234c1f0
-          subject-path: /notification_templates/descriptionannotationcreated/email/subject.{language}.txt
+        - #descriptionStatusChanged
+          key: 8389aca8-43bd-4aac-958d-24daf6ed47b4
+          subject-path: file:/notification_templates/descriptionstatuschanged/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/descriptionannotationcreated/email/body.{language}.html
+          body-path: file:/notification_templates/descriptionstatuschanged/email/body.{language}.html
           body-field-options:
-            mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}", "{anchor}" ]
+            mandatory: [ "{reasonName}", "{name}", "{statusName}", "{installation-url}", "{id}" ]
             optional:
               - key: "{recipient}"
                 value:
@@ -318,15 +361,42 @@ notification:
           bcc-mode: 0
           allow-attachments: false
           cipher-fields: [ ]
-        - #descriptionAnnotationStatusChanged
-          key: 3189e3a6-91e6-40c6-8ff8-275a68445aec
-          subject-path: /notification_templates/descriptionannotationstatuschanged/email/subject.{language}.txt
+        - #descriptionAnnotationCreated
+          key: db1e99d2-a240-4e75-9bb2-ef25b234c1f0
+          subject-path: file:/notification_templates/descriptionannotationcreated/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/descriptionannotationstatuschanged/email/body.{language}.html
+          body-path: file:/notification_templates/descriptionannotationcreated/email/body.{language}.html
           body-field-options:
-            mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}", "{anchor}", "{status}" ]
+            mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{planId}", "{descriptionId}", "{anchor}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{reasonName}]': null
+              '[{name}]': null
+              '[{planId}]': null
+              '[{descriptionId}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
+        - #descriptionAnnotationStatusChanged
+          key: 3189e3a6-91e6-40c6-8ff8-275a68445aec
+          subject-path: file:/notification_templates/descriptionannotationstatuschanged/email/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/descriptionannotationstatuschanged/email/body.{language}.html
+          body-field-options:
+            mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{planId}", "{descriptionId}", "{anchor}", "{status}" ]
             optional:
               - key: "{recipient}"
                 value:
@@ -338,6 +408,8 @@ notification:
               '[{recipient}]': null
               '[{tenant-url-path}]': null
               '[{status}]': null
+              '[{planId}]': null
+              '[{descriptionId}]': null
           cc: [ ]
           cc-mode: 0
           bcc: [ ]
@@ -346,11 +418,11 @@ notification:
           cipher-fields: [ ]
         -  #mergeAccountConfirmation
           key: BFE68845-CB05-4C5A-A03D-29161A7C9660
-          subject-path: /notification_templates/mergeacountconfirmation/email/subject.{language}.txt
+          subject-path: file:/notification_templates/mergeacountconfirmation/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/mergeacountconfirmation/email/body.{language}.html
+          body-path: file:/notification_templates/mergeacountconfirmation/email/body.{language}.html
           body-field-options:
             mandatory: [ "{recipient}", "{userName}", "{installation-url}", "{confirmationToken}" ]
             optional:
@@ -369,11 +441,11 @@ notification:
           cipher-fields: [ ]
         - #removeCredentialConfirmation
           key: C9BC3F16-057E-4BBA-8A5F-36BD835E5604
-          subject-path: /notification_templates/removecredentialconfirmation/email/subject.{language}.txt
+          subject-path: file:/notification_templates/removecredentialconfirmation/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ "{installation-url}", "{confirmationToken}" ]
             optional: [ ]
-          body-path: /notification_templates/removecredentialconfirmation/email/body.{language}.html
+          body-path: file:/notification_templates/removecredentialconfirmation/email/body.{language}.html
           body-field-options:
             mandatory: [ ]
             optional:
@@ -383,6 +455,7 @@ notification:
                 value: --
             formatting:
               '[{email}]': null
+              '[{tenant-url-path}]': null
           cc: [ ]
           cc-mode: 0
           bcc: [ ]
@@ -391,11 +464,11 @@ notification:
           cipher-fields: [ ]
         - #planDeposit
           key: 55736F7A-83AB-4190-AF43-9D031A6F9612
-          subject-path: /notification_templates/plandeposit/email/subject.{language}.txt
+          subject-path: file:/notification_templates/plandeposit/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/plandeposit/email/body.{language}.html
+          body-path: file:/notification_templates/plandeposit/email/body.{language}.html
           body-field-options:
             mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}" ]
             optional:
@@ -416,11 +489,11 @@ notification:
           cipher-fields: [ ]
         - #descriptionTemplateInvitation
           key: 223BB607-EFA1-4CE7-99EC-4BEABFEF9A8B
-          subject-path: /notification_templates/descriptiontemplateinvitation/email/subject.{language}.txt
+          subject-path: file:/notification_templates/descriptiontemplateinvitation/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/descriptiontemplateinvitation/email/body.{language}.html
+          body-path: file:/notification_templates/descriptiontemplateinvitation/email/body.{language}.html
           body-field-options:
             mandatory: [ "{templateName}", "{installation-url}", "{templateID}" ]
             optional:
@@ -440,11 +513,11 @@ notification:
           cipher-fields: [ ]
         - #contactSupportType
           key: 5B1D6C52-88F9-418B-9B8A-6F1F963D9EAD
-          subject-path: /notification_templates/contactsupport/email/subject.{language}.txt
+          subject-path: file:/notification_templates/contactsupport/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ "{subject}" ]
             optional: [ ]
-          body-path: /notification_templates/contactsupport/email/body.{language}.html
+          body-path: file:/notification_templates/contactsupport/email/body.{language}.html
           body-field-options:
             mandatory: [ "{description}", "{email}" ]
             formatting:
@@ -459,11 +532,11 @@ notification:
           cipher-fields: [ ]
         - #publicContactSupportType
           key: B542B606-ACC6-4629-ADEF-4D8EE2F01222
-          subject-path: /notification_templates/publiccontactsupport/email/subject.{language}.txt
+          subject-path: file:/notification_templates/publiccontactsupport/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ "{subject}" ]
             optional: [ ]
-          body-path: /notification_templates/publiccontactsupport/email/body.{language}.html
+          body-path: file:/notification_templates/publiccontactsupport/email/body.{language}.html
           body-field-options:
             mandatory: [ "{description}", "{email}", "{name}" ]
             formatting:
@@ -479,11 +552,11 @@ notification:
           cipher-fields: [ ]
         - #tenantSpecificInvitationExternalUserType
           key: 497dada5-eccc-4bc0-9e0b-63e22b4eb0be
-          subject-path: /notification_templates/tenantspecificinvitationexternaluser/email/subject.{language}.txt
+          subject-path: file:/notification_templates/tenantspecificinvitationexternaluser/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/tenantspecificinvitationexternaluser/email/body.{language}.html
+          body-path: file:/notification_templates/tenantspecificinvitationexternaluser/email/body.{language}.html
           body-field-options:
             mandatory: [ "{userName}", "{installation-url}", "{confirmationToken}" ]
             optional:
@@ -504,11 +577,11 @@ notification:
           cipher-fields: [ ]
         - #tenantSpecificInvitationExistingUserType
           key: b3809c17-d1e4-420a-919c-828564114191
-          subject-path: /notification_templates/tenantspecificinvitationexistinguser/email/subject.{language}.txt
+          subject-path: file:/notification_templates/tenantspecificinvitationexistinguser/email/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/tenantspecificinvitationexistinguser/email/body.{language}.html
+          body-path: file:/notification_templates/tenantspecificinvitationexistinguser/email/body.{language}.html
           body-field-options:
             mandatory: [ "{userName}", "{installation-url}", "{confirmationToken}" ]
             optional:
@@ -527,6 +600,108 @@ notification:
           bcc-mode: 0
           allow-attachments: false
           cipher-fields: [ ]
+        - #planEvaluation
+          key: 1900d73a-6ee4-455a-ab86-58f5749b85d8
+          subject-path: file:/notification_templates/planevaluation/email/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/planevaluation/email/body.{language}.html
+          body-field-options:
+            mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}", "{evaluatorName}", "{result}", "{benchmarks}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{reasonName}]': null
+              '[{name}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
+        - #descriptionEvaluation
+          key: 709b2cc8-24fa-4b9c-9bad-cfd3c6dc4037
+          subject-path: file:/notification_templates/descriptionevaluation/email/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/descriptionevaluation/email/body.{language}.html
+          body-field-options:
+            mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}", "{evaluatorName}", "{result}", "{benchmarks}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{reasonName}]': null
+              '[{name}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
+        - #taggedPlanAnnotationCreated
+          key: f58c8ca3-76eb-40d6-ac3b-2aa99aaa2b27
+          subject-path: file:/notification_templates/taggedplanannotationcreated/email/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/taggedplanannotationcreated/email/body.{language}.html
+          body-field-options:
+            mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}", "{anchor}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{reasonName}]': null
+              '[{name}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
+        - #taggedDescriptionAnnotationCreated
+          key: f1b49a19-51c6-4275-9af8-2b64d701b997
+          subject-path: file:/notification_templates/taggeddescriptionannotationcreated/email/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/taggeddescriptionannotationcreated/email/body.{language}.html
+          body-field-options:
+            mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{planId}", "{descriptionId}", "{anchor}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{reasonName}]': null
+              '[{name}]': null
+              '[{planId}]': null
+              '[{descriptionId}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
       template-cache:
         prefix: ${CACHE_DISAMBIGUATION:}
         key-pattern: "{prefix}:Notification_Message_Email_Template:{key}:v0"
@@ -534,13 +709,13 @@ notification:
       flows:
         - #planInvitationExistingUser
           key: 4904dea2-5079-46d3-83be-3a19c9ab45dc
-          subject-path: /notification_templates/planinvitationexistinguser/inapp/subject.{language}.txt
+          subject-path: file:/notification_templates/planinvitationexistinguser/inapp/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/planinvitationexistinguser/inapp/body.{language}.html
+          body-path: file:/notification_templates/planinvitationexistinguser/inapp/body.{language}.html
           body-field-options:
-            mandatory: [ "{planname}", "{planrole}", "{reasonName}", "{installation-url}", "{id}" ]
+            mandatory: [ "{planname}", "{planrole}", "{reasonName}", "{installation-url}", "{id}", "{anchor}" ]
             optional:
               - key: "{recipient}"
                 value:
@@ -556,11 +731,11 @@ notification:
           cipher-fields: [ ]
         - #planModified
           key: 4542262A-22F8-4BAA-9DB6-1C8E70AC1DBB
-          subject-path: /notification_templates/planmodified/inapp/subject.{language}.txt
+          subject-path: file:/notification_templates/planmodified/inapp/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/planmodified/inapp/body.{language}.html
+          body-path: file:/notification_templates/planmodified/inapp/body.{language}.html
           body-field-options:
             mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}" ]
             optional:
@@ -579,11 +754,11 @@ notification:
           cipher-fields: [ ]
         - #planFinalised
           key: 90DB0B46-42DE-BD89-AEBF-6F27EFEB256E
-          subject-path: /notification_templates/planfinalised/inapp/subject.{language}.txt
+          subject-path: file:/notification_templates/planfinalised/inapp/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/planfinalised/inapp/body.{language}.html
+          body-path: file:/notification_templates/planfinalised/inapp/body.{language}.html
           body-field-options:
             mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}" ]
             optional:
@@ -600,13 +775,36 @@ notification:
               '[{tenant-url-path}]': null
           priority-key: null
           cipher-fields: [ ]
-        - #planAnnotationCreated
-          key: 1cca80f5-2ea9-41ae-a204-9b4332216c24
-          subject-path: /notification_templates/planannotationcreated/inapp/subject.{language}.txt
+        - #planStatusChanged
+          key: 25bbc307-4fa8-4381-b2d7-a3395f57d575
+          subject-path: file:/notification_templates/planstatuschanged/inapp/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/planannotationcreated/inapp/body.{language}.html
+          body-path: file:/notification_templates/planstatuschanged/inapp/body.{language}.html
+          body-field-options:
+            mandatory: [ "{reasonName}", "{name}", "{statusName}", "{installation-url}", "{id}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{reasonName}]': null
+              '[{name}]': null
+              '[{installation-url}]': null
+              '[{id}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          priority-key: null
+          cipher-fields: [ ]
+        - #planAnnotationCreated
+          key: 1cca80f5-2ea9-41ae-a204-9b4332216c24
+          subject-path: file:/notification_templates/planannotationcreated/inapp/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/planannotationcreated/inapp/body.{language}.html
           body-field-options:
             mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}", "{anchor}" ]
             optional:
@@ -627,11 +825,11 @@ notification:
           cipher-fields: [ ]
         - #planAnnotationStatusChanged
           key: 0c8a5c62-e48f-4eca-99ee-a7f262477061
-          subject-path: /notification_templates/planannotationstatuschanged/inapp/subject.{language}.txt
+          subject-path: file:/notification_templates/planannotationstatuschanged/inapp/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/planannotationstatuschanged/inapp/body.{language}.html
+          body-path: file:/notification_templates/planannotationstatuschanged/inapp/body.{language}.html
           body-field-options:
             mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}", "{anchor}", "{status}" ]
             optional:
@@ -653,11 +851,11 @@ notification:
           cipher-fields: [ ]
         - #desriptionCreated
           key: 8965b1d5-99a6-4acf-9016-c0d0ce341364
-          subject-path: /notification_templates/descriptioncreated/inapp/subject.{language}.txt
+          subject-path: file:/notification_templates/descriptioncreated/inapp/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/descriptioncreated/inapp/body.{language}.html
+          body-path: file:/notification_templates/descriptioncreated/inapp/body.{language}.html
           body-field-options:
             mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}" ]
             optional:
@@ -678,11 +876,11 @@ notification:
           cipher-fields: [ ]
         - #desriptionModified
           key: 4FDBFA80-7A71-4A69-B854-67CBB70648F1
-          subject-path: /notification_templates/descriptionmodified/inapp/subject.{language}.txt
+          subject-path: file:/notification_templates/descriptionmodified/inapp/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/descriptionmodified/inapp/body.{language}.html
+          body-path: file:/notification_templates/descriptionmodified/inapp/body.{language}.html
           body-field-options:
             mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}" ]
             optional:
@@ -701,11 +899,11 @@ notification:
           cipher-fields: [ ]
         - #descriptionFinalised
           key: 33790bad-94d4-488a-8ee2-7f6295ca18ea
-          subject-path: /notification_templates/descriptionfinalised/inapp/subject.{language}.txt
+          subject-path: file:/notification_templates/descriptionfinalised/inapp/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/descriptionfinalised/inapp/body.{language}.html
+          body-path: file:/notification_templates/descriptionfinalised/inapp/body.{language}.html
           body-field-options:
             mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}" ]
             optional:
@@ -722,15 +920,15 @@ notification:
               '[{tenant-url-path}]': null
           priority-key: null
           cipher-fields: [ ]
-        - #descriptionAnnotationCreated
-          key: db1e99d2-a240-4e75-9bb2-ef25b234c1f0
-          subject-path: /notification_templates/descriptionannotationcreated/inapp/subject.{language}.txt
+        - #descriptionStatusChanged
+          key: 8389aca8-43bd-4aac-958d-24daf6ed47b4
+          subject-path: file:/notification_templates/descriptionstatuschanged/inapp/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/descriptionannotationcreated/inapp/body.{language}.html
+          body-path: file:/notification_templates/descriptionstatuschanged/inapp/body.{language}.html
           body-field-options:
-            mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}", "{anchor}"]
+            mandatory: [ "{reasonName}", "{name}", "{statusName}", "{installation-url}", "{id}" ]
             optional:
               - key: "{recipient}"
                 value:
@@ -745,15 +943,39 @@ notification:
               '[{tenant-url-path}]': null
           priority-key: null
           cipher-fields: [ ]
-        - #descriptionAnnotationStatusChanged
-          key: 3189e3a6-91e6-40c6-8ff8-275a68445aec
-          subject-path: /notification_templates/descriptionannotationstatuschanged/inapp/subject.{language}.txt
+        - #descriptionAnnotationCreated
+          key: db1e99d2-a240-4e75-9bb2-ef25b234c1f0
+          subject-path: file:/notification_templates/descriptionannotationcreated/inapp/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/descriptionannotationstatuschanged/inapp/body.{language}.html
+          body-path: file:/notification_templates/descriptionannotationcreated/inapp/body.{language}.html
           body-field-options:
-            mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}", "{anchor}", "{status}" ]
+            mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{planId}", "{descriptionId}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{reasonName}]': null
+              '[{name}]': null
+              '[{installation-url}]': null
+              '[{planId}]': null
+              '[{descriptionId}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          priority-key: null
+          cipher-fields: [ ]
+        - #descriptionAnnotationStatusChanged
+          key: 3189e3a6-91e6-40c6-8ff8-275a68445aec
+          subject-path: file:/notification_templates/descriptionannotationstatuschanged/inapp/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/descriptionannotationstatuschanged/inapp/body.{language}.html
+          body-field-options:
+            mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{planId}", "{descriptionId}", "{anchor}", "{status}" ]
             optional:
               - key: "{recipient}"
                 value:
@@ -765,6 +987,8 @@ notification:
               '[{recipient}]': null
               '[{tenant-url-path}]': null
               '[{status}]': null
+              '[{planId}]': null
+              '[{descriptionId}]': null
           cc: [ ]
           cc-mode: 0
           bcc: [ ]
@@ -773,31 +997,33 @@ notification:
           cipher-fields: [ ]
         - #mergeAccountConfirmation
           key: BFE68845-CB05-4C5A-A03D-29161A7C9660
-          subject-path: /notification_templates/mergeacountconfirmation/inapp/subject.{language}.txt
+          subject-path: file:/notification_templates/mergeacountconfirmation/inapp/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/mergeacountconfirmation/inapp/body.{language}.html
+          body-path: file:/notification_templates/mergeacountconfirmation/inapp/body.{language}.html
           body-field-options:
-            mandatory: [ "{recipient}", "{userName}", "{installation-url}", "{confirmationToken}" ]
+            mandatory: [ "{userName}", "{installation-url}", "{confirmationToken}" ]
             optional:
               - key: "{expiration_time}"
                 value: ---
+              - key: "{tenant-url-path}"
+                value:
             formatting:
               '[{userName}]': null
               '[{installation-url}]': null
               '[{confirmationToken}]': null
               '[{expiration_time}]': null
-              '[{recipient}]': null
+              '[{tenant-url-path}]': null
           priority-key: null
           cipher-fields: [ ]
         - #removeCredentialConfirmation
           key: C9BC3F16-057E-4BBA-8A5F-36BD835E5604
-          subject-path: /notification_templates/removecredentialconfirmation/inapp/subject.{language}.txt
+          subject-path: file:/notification_templates/removecredentialconfirmation/inapp/subject.{language}.txt
           subject-field-options:
-            mandatory: [ "{recipient}", "{installation-url}", "{confirmationToken}" ]
+            mandatory: [ "{installation-url}", "{confirmationToken}" ]
             optional: [ ]
-          body-path: /notification_templates/removecredentialconfirmation/inapp/body.{language}.html
+          body-path: file:/notification_templates/removecredentialconfirmation/inapp/body.{language}.html
           body-field-options:
             mandatory: [ ]
             optional:
@@ -805,19 +1031,21 @@ notification:
                 value: email
               - key: "{expiration_time}"
                 value: --
+              - key: "{tenant-url-path}"
+                value:
             formatting:
               '[{email}]': null
               '[{expiration_time}]': null
-              '[{recipient}]': null
+              '[{tenant-url-path}]': null
           priority-key: null
           cipher-fields: [ ]
         - #planDeposit
           key: 55736F7A-83AB-4190-AF43-9D031A6F9612
-          subject-path: /notification_templates/plandeposit/inapp/subject.{language}.txt
+          subject-path: file:/notification_templates/plandeposit/inapp/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/plandeposit/inapp/body.{language}.html
+          body-path: file:/notification_templates/plandeposit/inapp/body.{language}.html
           body-field-options:
             mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}" ]
             optional:
@@ -836,11 +1064,11 @@ notification:
           cipher-fields: [ ]
         - #descriptionTemplateInvitation
           key: 223BB607-EFA1-4CE7-99EC-4BEABFEF9A8B
-          subject-path: /notification_templates/descriptiontemplateinvitation/inapp/subject.{language}.txt
+          subject-path: file:/notification_templates/descriptiontemplateinvitation/inapp/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/descriptiontemplateinvitation/inapp/body.{language}.html
+          body-path: file:/notification_templates/descriptiontemplateinvitation/inapp/body.{language}.html
           body-field-options:
             mandatory: [ "{templateName}", "{installation-url}", "{templateID}" ]
             optional:
@@ -856,13 +1084,63 @@ notification:
               '[{tenant-url-path}]': null
           priority-key: null
           cipher-fields: [ ]
-        - #tenantSpecificInvitationExistingUserType
-          key: b3809c17-d1e4-420a-919c-828564114191
-          subject-path: /notification_templates/tenantspecificinvitationexistinguser/inapp/subject.{language}.txt
+        - #planEvaluation
+          key: 1900d73a-6ee4-455a-ab86-58f5749b85d8
+          subject-path: file:/notification_templates/planevaluation/inapp/subject.{language}.txt
           subject-field-options:
             mandatory: [ ]
             optional: [ ]
-          body-path: /notification_templates/tenantspecificinvitationexistinguser/inapp/body.{language}.html
+          body-path: file:/notification_templates/planevaluation/inapp/body.{language}.html
+          body-field-options:
+            mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}", "{evaluatorName}", "{result}", "{benchmarks}"]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{reasonName}]': null
+              '[{name}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
+        - #descriptionEvaluation
+          key: 709b2cc8-24fa-4b9c-9bad-cfd3c6dc4037
+          subject-path: file:/notification_templates/descriptionevaluation/inapp/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/descriptionevaluation/inapp/body.{language}.html
+          body-field-options:
+            mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}", "{evaluatorName}", "{result}", "{benchmarks}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{reasonName}]': null
+              '[{name}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
+        - #tenantSpecificInvitationExistingUserType
+          key: b3809c17-d1e4-420a-919c-828564114191
+          subject-path: file:/notification_templates/tenantspecificinvitationexistinguser/inapp/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/tenantspecificinvitationexistinguser/inapp/body.{language}.html
           body-field-options:
             mandatory: [ "{userName}", "{installation-url}", "{confirmationToken}" ]
             optional:
@@ -880,6 +1158,55 @@ notification:
           bcc: [ ]
           bcc-mode: 0
           allow-attachments: false
+          cipher-fields: [ ]
+        - #taggedplanAnnotationCreated
+          key: f58c8ca3-76eb-40d6-ac3b-2aa99aaa2b27
+          subject-path: file:/notification_templates/taggedplanannotationcreated/inapp/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/taggedplanannotationcreated/inapp/body.{language}.html
+          body-field-options:
+            mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{id}", "{anchor}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{reasonName}]': null
+              '[{name}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
+        - #taggeddescriptionAnnotationCreated
+          key: f1b49a19-51c6-4275-9af8-2b64d701b997
+          subject-path: file:/notification_templates/taggeddescriptionannotationcreated/inapp/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/taggeddescriptionannotationcreated/inapp/body.{language}.html
+          body-field-options:
+            mandatory: [ "{reasonName}", "{name}", "{installation-url}", "{planId}", "{descriptionId}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{reasonName}]': null
+              '[{name}]': null
+              '[{installation-url}]': null
+              '[{planId}]': null
+              '[{descriptionId}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          priority-key: null
           cipher-fields: [ ]
       template-cache:
         prefix: ${CACHE_DISAMBIGUATION}
