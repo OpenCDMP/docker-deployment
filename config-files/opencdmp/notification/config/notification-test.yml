@@ -3,7 +3,7 @@ notification:
     fields:
       - key: "{installation-url}"
         type: "String"
-        value: "http://host.docker.internal:8081"
+        value: "http://opencdmp.localhost:8180"
   resolver:
     global-policies:
       - #planInvitationExternalUser
@@ -80,6 +80,24 @@ notification:
         contacts: [ inapp, email ]
       - #taggedDescriptionAnnotationCreated
         type: f1b49a19-51c6-4275-9af8-2b64d701b997
+        contacts: [ inapp, email ]
+      - #planCreatedSuggestionType
+        type: 6abe813d-0cff-4e62-b294-88d4d1ad23f7
+        contacts: [ inapp, email ]
+      - #planUpdatedSuggestionType
+        type: e546de92-efd6-42ba-9385-87ca5f73859a
+        contacts: [ inapp, email ]
+      - #planAccessRemovedType
+        type: 618a79c2-1c18-4b28-8603-60d5dac47ad7
+        contacts: [ inapp, email ]
+      - #planUserRoleChangedType
+        type: 913a3d21-94f9-4f14-9a84-7d1cab5a7a5c
+        contacts: [ inapp, email ]
+      - #planUserRoleCreatedType
+        type: af9d8589-193e-4695-a5af-6ecbdc7e827b
+        contacts: [ inapp, email ]
+      - #planUserRoleRemovedType
+        type: 21c6e9ae-b7d7-41d7-bfb5-33ec385305cc
         contacts: [ inapp, email ]
   message:
     email:
@@ -424,7 +442,7 @@ notification:
             optional: [ ]
           body-path: file:/notification_templates/mergeacountconfirmation/email/body.{language}.html
           body-field-options:
-            mandatory: [ "{recipient}", "{userName}", "{installation-url}", "{confirmationToken}" ]
+            mandatory: [ "{userName}", "{installation-url}", "{confirmationToken}" ]
             optional:
               - key: "{expiration_time}"
                 value: ---
@@ -432,7 +450,7 @@ notification:
               '[{userName}]': null
               '[{installation-url}]': null
               '[{expiration_time}]': null
-              '[{recipient}]': null
+              '[{tenant-url-path}]': null
           cc: [ ]
           cc-mode: 0
           bcc: [ ]
@@ -702,6 +720,156 @@ notification:
           bcc-mode: 0
           allow-attachments: false
           cipher-fields: [ ]
+        - #planCreatedSuggestionType
+          key: 6abe813d-0cff-4e62-b294-88d4d1ad23f7
+          subject-path: file:/notification_templates/plancreatedsuggestion/email/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/plancreatedsuggestion/email/body.{language}.html
+          body-field-options:
+            mandatory: [ "{sourceName}", "{installation-url}", "{id}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{sourceName}]': null
+              '[{id}]': null
+              '[{installation-url}]': null
+              '[{recipient}]': null
+        - #planUpdatedSuggestionType
+          key: e546de92-efd6-42ba-9385-87ca5f73859a
+          subject-path: file:/notification_templates/planupdatedsuggestion/email/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/planupdatedsuggestion/email/body.{language}.html
+          body-field-options:
+            mandatory: [ "{name}", "{planId}", "{sourceName}", "{installation-url}", "{id}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{name}]': null
+              '[{planId}]': null
+              '[{sourceName}]': null
+              '[{id}]': null
+              '[{installation-url}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
+        - #planAccessRemovedType
+          key: 618a79c2-1c18-4b28-8603-60d5dac47ad7
+          subject-path: file:/notification_templates/planacessremoved/email/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/planacessremoved/email/body.{language}.html
+          body-field-options:
+            mandatory: [ "{planName}", "{performedBy}", "{installation-url}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{planName}]': null
+              '[{installation-url}]': null
+              '[{performedBy}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
+        - #planUserRoleChangedType
+          key: 913a3d21-94f9-4f14-9a84-7d1cab5a7a5c
+          subject-path: file:/notification_templates/planuserrolechanged/email/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/planuserrolechanged/email/body.{language}.html
+          body-field-options:
+            mandatory: [ "{planName}", "{performedBy}", "{installation-url}", "{oldRoles}", "{newRoles}", "{id}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{planName}]': null
+              '[{performedBy}]': null
+              '[{id}]': null
+              '[{installation-url}]': null
+              '[{oldRoles}]': null
+              '[{newRoles}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
+        - #planUserRoleCreatedType
+          key: af9d8589-193e-4695-a5af-6ecbdc7e827b
+          subject-path: file:/notification_templates/planuserrolecreated/email/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/planuserrolecreated/email/body.{language}.html
+          body-field-options:
+            mandatory: [ "{planName}", "{performedBy}", "{installation-url}", "{newRoles}", "{id}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{planName}]': null
+              '[{performedBy}]': null
+              '[{id}]': null
+              '[{installation-url}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+        - #planUserRoleRemovedType
+          key: 21c6e9ae-b7d7-41d7-bfb5-33ec385305cc
+          subject-path: file:/notification_templates/planuserroleremoved/email/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/planuserroleremoved/email/body.{language}.html
+          body-field-options:
+            mandatory: [ "{planName}", "{performedBy}", "{installation-url}", "{oldRoles}", "{id}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{planName}]': null
+              '[{performedBy}]': null
+              '[{id}]': null
+              '[{installation-url}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
       template-cache:
         prefix: ${CACHE_DISAMBIGUATION:}
         key-pattern: "{prefix}:Notification_Message_Email_Template:{key}:v0"
@@ -715,7 +883,7 @@ notification:
             optional: [ ]
           body-path: file:/notification_templates/planinvitationexistinguser/inapp/body.{language}.html
           body-field-options:
-            mandatory: [ "{planname}", "{planrole}", "{reasonName}", "{installation-url}", "{id}", "{anchor}" ]
+            mandatory: [ "{planname}", "{planrole}", "{reasonName}", "{installation-url}", "{id}"]
             optional:
               - key: "{recipient}"
                 value:
@@ -1207,6 +1375,169 @@ notification:
               '[{recipient}]': null
               '[{tenant-url-path}]': null
           priority-key: null
+          cipher-fields: [ ]
+        - #planCreatedSuggestionType
+          key: 6abe813d-0cff-4e62-b294-88d4d1ad23f7
+          subject-path: file:/notification_templates/plancreatedsuggestion/inapp/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/plancreatedsuggestion/inapp/body.{language}.html
+          body-field-options:
+            mandatory: [ "{sourceName}", "{installation-url}", "{id}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{sourceName}]': null
+              '[{id}]': null
+              '[{installation-url}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
+        - #planUpdatedSuggestionType
+          key: e546de92-efd6-42ba-9385-87ca5f73859a
+          subject-path: file:/notification_templates/planupdatedsuggestion/inapp/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/planupdatedsuggestion/inapp/body.{language}.html
+          body-field-options:
+            mandatory: [ "{name}", "{planId}", "{sourceName}", "{installation-url}", "{id}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{name}]': null
+              '[{planId}]': null
+              '[{sourceName}]': null
+              '[{id}]': null
+              '[{installation-url}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
+        - #planAccessRemovedType
+          key: 618a79c2-1c18-4b28-8603-60d5dac47ad7
+          subject-path: file:/notification_templates/planacessremoved/inapp/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/planacessremoved/inapp/body.{language}.html
+          body-field-options:
+            mandatory: [ "{planName}", "{performedBy}", "{installation-url}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{planName}]': null
+              '[{installation-url}]': null
+              '[{performedBy}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
+        - #planUserRoleChangedType
+          key: 913a3d21-94f9-4f14-9a84-7d1cab5a7a5c
+          subject-path: file:/notification_templates/planuserrolechanged/inapp/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/planuserrolechanged/inapp/body.{language}.html
+          body-field-options:
+            mandatory: [ "{planName}", "{performedBy}", "{installation-url}", "{oldRoles}", "{newRoles}", "{id}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{planName}]': null
+              '[{performedBy}]': null
+              '[{id}]': null
+              '[{installation-url}]': null
+              '[{oldRoles}]': null
+              '[{newRoles}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
+        - #planUserRoleCreatedType
+          key: af9d8589-193e-4695-a5af-6ecbdc7e827b
+          subject-path: file:/notification_templates/planuserrolecreated/inapp/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/planuserrolecreated/inapp/body.{language}.html
+          body-field-options:
+            mandatory: [ "{planName}", "{performedBy}", "{installation-url}", "{newRoles}", "{id}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{planName}]': null
+              '[{performedBy}]': null
+              '[{id}]': null
+              '[{installation-url}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
+          cipher-fields: [ ]
+        - #planUserRoleRemovedType
+          key: 21c6e9ae-b7d7-41d7-bfb5-33ec385305cc
+          subject-path: file:/notification_templates/planuserroleremoved/inapp/subject.{language}.txt
+          subject-field-options:
+            mandatory: [ ]
+            optional: [ ]
+          body-path: file:/notification_templates/planuserroleremoved/inapp/body.{language}.html
+          body-field-options:
+            mandatory: [ "{planName}", "{performedBy}", "{installation-url}", "{oldRoles}", "{id}" ]
+            optional:
+              - key: "{recipient}"
+                value:
+              - key: "{tenant-url-path}"
+                value:
+            formatting:
+              '[{planName}]': null
+              '[{performedBy}]': null
+              '[{id}]': null
+              '[{installation-url}]': null
+              '[{recipient}]': null
+              '[{tenant-url-path}]': null
+          cc: [ ]
+          cc-mode: 0
+          bcc: [ ]
+          bcc-mode: 0
+          allow-attachments: false
           cipher-fields: [ ]
       template-cache:
         prefix: ${CACHE_DISAMBIGUATION}

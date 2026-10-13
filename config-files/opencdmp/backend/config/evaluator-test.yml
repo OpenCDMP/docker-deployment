@@ -1,6 +1,6 @@
 evaluator:
   sources:
-    - url: http://opencdmp.evaluator:8080/
+    - url: http://opencdmp.evaluator:8080
       evaluatorId: rda-maDMP
       rdaTransformerId: rda-file-transformer
       issuer-url: ${EVALUATOR_AUTH_TOKEN_ENDPOINT}

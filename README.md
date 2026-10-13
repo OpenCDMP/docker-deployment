@@ -1,102 +1,68 @@
-# OpenCDMP Docker Deployment
+# OpenCDMP Docker example
 
-This repository provides an example configuration for deploying OpenCDMP with Docker and Docker Compose. By following the setup below, you can spin up a complete, containerized environment for OpenCDMP.
+This repository holds an example Docker Compose setup that starts a complete [OpenCDMP](https://github.com/OpenCDMP/OpenCDMP) installation on one machine: the webapp, the API service, the notification and annotation services, a DOCX and an RDA JSON file transformer, the RDA maDMP evaluator, the Zenodo deposit service, PostgreSQL, Elasticsearch, RabbitMQ, Keycloak, the Gotenberg PDF service, and an Nginx proxy in front of them.
 
----
+> **For local evaluation only.** Every password is a demo default, Keycloak runs in development mode, and the application is served over plain HTTP. Before real users sign in, work through [Before going to production](https://opencdmp.github.io/deployment/install/production/).
 
-## Overview
-
-**OpenCDMP** is an open and extensible software platform designed to simplify the management, monitoring, and maintenance of **Output Management Plans (OMPs)**, such as **Data Management Plans (DMPs)** and **Software Management Plans (SMPs)**. It provides a flexible and customizable environment that streamlines the complex processes involved in handling OMPs, ensuring efficiency, compliance, and collaboration across various projects and organizations. 
-This **docker-deployment** repository contains Docker Compose files and supporting resources that demonstrate how to get OpenCDMP services up and running easily in containers.
-
----
+The full walkthrough is in the [Installation guide](https://opencdmp.github.io/deployment/install/).
 
 ## Prerequisites
 
-1. **Docker** (latest recommended)  
-   [Install Docker](https://docs.docker.com/get-docker/)
+- [Docker](https://docs.docker.com/get-docker/) with [Docker Compose](https://docs.docker.com/compose/install/) version 2 (the `docker compose` command).
+- [Git](https://git-scm.com/downloads), to clone the repository.
+- About 8 GB of memory for the containers; they can grow to about 16 GB.
+- Internet access on the first start, to pull the images and to download the `analysis-icu` plugin of Elasticsearch.
 
-2. **Docker Compose**  
-   [Install Docker Compose](https://docs.docker.com/compose/install/)
-
-3. **Git** (to clone this repository)  
-   [Install Git](https://git-scm.com/downloads)
-
----
-
-## Repository Structure
-
-Below is a brief overview of the key files and folders:
+## Files
 
 ```
 docker-deployment/
-|── .env
-|── docker-compose.yml
-|── docker-compose.override.yml
-|── deploy_opencdmp.sh
-|── config-files/
- └── ...configuration files for each service...
+├── .env                          # registries, image versions, ports, paths, Elasticsearch passwords
+├── docker-compose.yml            # the services and their images
+├── docker-compose.override.yml   # ports, volumes, networks, health checks, memory limits
+└── config-files/                 # configuration of each service (proxy, keycloak, postgres, rabbitmq, elk, opencdmp/<service>)
 ```
-- **`deploy_opencdmp.sh`** – A convenience script to deploy all containers for OpenCDMP.  
-- **`.env`** – Example environment file containing env variables for containers.
-- **`docker-compose.yml`** – Main Docker Compose file.
-- **`docker-compose.override.yml`** – Override Compose file, with networks, port mappings, and volume configuration.
 
----
+The containers keep their data in `storage/` and write their logs to `logs/`, next to these files.
 
-## Configuration
+## Start
 
-1. **Clone the Repository**
 ```bash
 git clone https://github.com/OpenCDMP/docker-deployment.git
 cd docker-deployment
+docker compose up -d
 ```
 
-2. **Adjust `.env` file**
+The first start takes a few minutes: Elasticsearch installs its `analysis-icu` plugin, Keycloak imports the `OpenCDMP` realm, and the API service creates the database schema. The containers start in dependency order on their own. Check them with `docker compose ps`; the API service and the plugins report `healthy` once they are ready.
 
-3. **Review and Align Configuration Files**
-  - The `config-files/` folder contains configuration files per service that you can adapt for your deployment.
-  - Ensure these files match your .env settings and environment needs.
+## Open the application
 
-4. **Review Compose Files** 
-  - Verify or modify any settings (e.g., exposed ports, volumes, service names) to fit your environment.
+Open **http://opencdmp.localhost:8180/** and sign in with the demo administrator of the imported realm:
 
----
+| | User | Password |
+| --- | --- | --- |
+| OpenCDMP | `opencdmp-admin` | `admin` |
+| Keycloak admin console, at http://opencdmp.localhost:8180/auth/ | `keycloak-admin` | `admin` |
 
-## Usage
+These accounts and passwords are demo defaults: change them before anyone else can reach the installation.
 
-For a straightforward deployment, simply run:
+`opencdmp.localhost` needs no setup: browsers resolve every `*.localhost` name to your own machine, and inside Docker the proxy answers to the same name. If your browser cannot open it, add `127.0.0.1 opencdmp.localhost` to your hosts file.
 
-```bash
-./deploy_opencdmp.sh
-```
+## Adapt the example
 
-This script pulls necessary images (if not present) and starts the containers in the background. Once finished, you can verify the services are up and running via Docker logs or by visiting the relevant ports in your browser.
-After the containers come up, navigate to `http://host.docker.internal:8081/`.
-More information can be found in the docs here: https://opencdmp.github.io/getting-started/deployment/
+- **Passwords.** `ELASTIC_PASSWORD` (the Elasticsearch `elastic` superuser) and `ELASTIC_API_PASSWORD` (the user the API service connects as) are in `.env`; the Keycloak administrator (`KC_BOOTSTRAP_ADMIN_USERNAME`, `KC_BOOTSTRAP_ADMIN_PASSWORD`) is in `config-files/keycloak/keycloak.env`. All of them take effect on the first start only, so change them before it. [Replace the demo secrets](https://opencdmp.github.io/deployment/install/production/#replace-the-demo-secrets) lists the others, including the client secrets of the realm.
+- **Ports.** The application is published on port `8180` (`PROXY_APP_PORT`) and PostgreSQL on `127.0.0.1:5433` (`POSTGRES_PORT`). To serve the application on another port or host name, replace `8180` or `opencdmp.localhost` in `.env`, in the files under `config-files/`, and in `docker-compose.override.yml`.
+- **Services.** The files under `config-files/` configure each service; see [Configuration](https://opencdmp.github.io/deployment/configuration/), [Keycloak setup](https://opencdmp.github.io/deployment/configuration/keycloak/), and [Registering plugin services](https://opencdmp.github.io/deployment/configuration/plugin-services/). Publishing to Zenodo needs your own Zenodo (sandbox) application in `config-files/opencdmp/zenodo/config/app-test.env`; see [Deposit services](https://opencdmp.github.io/deployment/configuration/backend/deposit/).
 
----
+## Logs and troubleshooting
 
-## Storage
+Each service logs to its own folder under `logs/`. See [Logging and monitoring](https://opencdmp.github.io/deployment/configuration/logging-and-monitoring/) and [Troubleshooting a deployment](https://opencdmp.github.io/deployment/troubleshooting/).
 
-For storage all data are saved in the host at the `storage/` folder. Align `docker-compose.override.yml` based on you deployment's requirements.
+## Start over or upgrade
 
----
-
-## Logs and Troubleshooting
-
-Logs are persisted at the `logs/` folder per service.
-
----
+- To discard the installation, run `docker compose down`, then delete the `storage/` and `logs/` folders.
+- To move to a new version, follow the [upgrade guide](https://opencdmp.github.io/deployment/install/upgrade/).
 
 ## License
 
-OpenCDMP is released under the [EUPL 1.2 License](LICENSE).
-
----
-
-## 🌐 **Contact**
-
-For questions or support, please contact:
-
-- **Email**: opencdmp at cite.gr
+This example is licensed under the [European Union Public Licence (EUPL) v1.2](LICENSE).

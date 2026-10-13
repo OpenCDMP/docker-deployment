@@ -12,13 +12,20 @@ services:
           cpus: '0.5'
     memswap_limit: 512M
     ports:
-      - "0.0.0.0:${PROXY_APP_PORT}:8081"
+      - "${PROXY_APP_PORT}:8180"
     volumes:
       - ${CONFIG_FILES_PATH}/proxy/nginx.conf:/etc/nginx/nginx.conf
       - ${CONFIG_FILES_PATH}/proxy/ProxyNginx.conf:/etc/nginx/conf.d/default.conf
       - ${LOG_FILES_PATH}/proxy:/tmp/logs
+    # Browsers resolve *.localhost to this machine on their own and treat it as a secure origin; the alias makes the
+    # same URL reach the proxy from inside the containers, so the Keycloak issuer is identical on both sides.
     networks:
-      - opencdmp-proxy-network
+      opencdmp-proxy-network:
+        aliases:
+          - opencdmp.localhost
+      opencdmp-backend-network:
+        aliases:
+          - opencdmp.localhost
 
 ############################## OPENCDMP APP #################################
   opencdmp.backend:
@@ -34,17 +41,23 @@ services:
     memswap_limit: 4096M
     environment:
       - PROFILE=${PROFILE}
+      - ELASTIC_PASS=${ELASTIC_API_PASSWORD}
     expose:
       - "8080"
     volumes:
       - ${CONFIG_FILES_PATH}/opencdmp/backend/config:/config
-      - ${CONFIG_FILES_PATH}/opencdmp/backend/i18n:/i18n
       - ${CONFIG_FILES_PATH}/opencdmp/backend/material:/material
       - ${STORAGE_PATH}/opencdmp/backend:/storage
       - ${LOG_FILES_PATH}/opencdmp/backend:/logs
     networks:
       - opencdmp-proxy-network
       - opencdmp-backend-network
+    healthcheck:
+     test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep UP || exit 1"]
+     interval: 30s
+     timeout: 10s
+     retries: 3
+     start_period: 120s
 
   opencdmp.frontend:
     restart: unless-stopped
@@ -67,8 +80,6 @@ services:
       - KEYCLOAK_REALM=${KEYCLOAK_REALM}
       - KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID}
       - KEYCLOAK_SCOPE=${KEYCLOAK_SCOPE}
-      - KPI_SERVICE_ENABLED=${KPI_SERVICE_ENABLED}
-      - ACCOUNTING_SERVICE_ENABLED=${ACCOUNTING_SERVICE_ENABLED}
       - LOGGING_ENABLED=${LOGGING_ENABLED}
     volumes:
       # - ${CONFIG_FILES_PATH}/opencdmp/frontend/config-override.json:/usr/share/nginx/html/assets/config/config-override.json
@@ -148,6 +159,12 @@ services:
       # - ${STORAGE_PATH}/opencdmp/file-transformer-docx:/storage
     networks:
       - opencdmp-backend-network
+    healthcheck:
+     test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep UP || exit 1"]
+     interval: 30s
+     timeout: 10s
+     retries: 3
+     start_period: 120s
 
   opencdmp.file.transformer.rdajson:
     restart: unless-stopped
@@ -172,6 +189,12 @@ services:
       # - ${STORAGE_PATH}/opencdmp/file-transformer-rda-json:/storage
     networks:
       - opencdmp-backend-network
+    healthcheck:
+     test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep UP || exit 1"]
+     interval: 30s
+     timeout: 10s
+     retries: 3
+     start_period: 120s
 
 ###################################### EVALUATOR ##############################################
 
@@ -196,6 +219,12 @@ services:
       - ${LOG_FILES_PATH}/opencdmp/evaluator-rda-madmp:/logs
     networks:
       - opencdmp-backend-network
+    healthcheck:
+     test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep UP || exit 1"]
+     interval: 30s
+     timeout: 10s
+     retries: 3
+     start_period: 120s
 
 # ############################## ZENODO #######################################
   opencdmp.zenodo:
@@ -218,6 +247,26 @@ services:
       - ${LOG_FILES_PATH}/opencdmp/zenodo:/logs
     networks:
       - opencdmp-backend-network
+    healthcheck:
+     test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep UP || exit 1"]
+     interval: 30s
+     timeout: 10s
+     retries: 3
+     start_period: 120s
+
+################################# INIT ####################################
+  # Docker creates missing bind-mount folders as root; Elasticsearch (1000:0) and Keycloak (1000) cannot write to those.
+  opencdmp.init:
+    user: "0"
+    volumes:
+      - ${STORAGE_PATH}:/storage
+      - ${LOG_FILES_PATH}:/logs
+    command: >
+      bash -c '
+        mkdir -p /storage/elasticsearch/plugins /logs/elasticsearch /logs/keycloak;
+        chown -R 1000:0 /storage/elasticsearch /logs/elasticsearch;
+        chown -R 1000 /logs/keycloak;
+      '
 
 ################################# POSTGRES ####################################
 
@@ -233,7 +282,7 @@ services:
           cpus: '0.5'
     memswap_limit: 4096M
     ports:
-      - "0.0.0.0:${POSTGRES_PORT}:5432"
+      - "127.0.0.1:${POSTGRES_PORT}:5432"
     env_file:
       - ${CONFIG_FILES_PATH}/postgres/postgres.env
     volumes:
@@ -250,10 +299,9 @@ services:
 ################################# ELASTICSEARCH #################################################
   opencdmp.elasticsearch.setup:
     user: "0"
-    env_file:
-      - ${CONFIG_FILES_PATH}/elk/elk.env
     environment:
-      - ELASTIC_PASSWORD=elastic
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ELASTIC_API_PASSWORD=${ELASTIC_API_PASSWORD}
     volumes:
       - ${CONFIG_FILES_PATH}/elk/elasticsearch/index_init.sh:/usr/share/elasticsearch/config/index_init.sh
     command: >
@@ -262,12 +310,9 @@ services:
           echo "Set the ELASTIC_PASSWORD environment variable in the .env file";
           exit 1;
         fi;
-        echo "Setting file permissions"
-        chown -R root:root /usr/share/elasticsearch/config/index_init.sh;
-        chmod 744 /usr/share/elasticsearch/config/index_init.sh;
         echo "Waiting for Elasticsearch availability";
-        until curl -s http://opencdmp.elasticsearch:9200 | grep -q "missing authentication credentials"; do sleep 30; done;
-        /usr/share/elasticsearch/config/index_init.sh;
+        until curl -s http://opencdmp.elasticsearch:9200 | grep -q "missing authentication credentials"; do sleep 10; done;
+        sed "s/\r$$//" /usr/share/elasticsearch/config/index_init.sh | bash;
         echo "All done!";
       '
     networks:
@@ -284,10 +329,16 @@ services:
           memory: 1024M
           cpus: '1'
     memswap_limit: 4096M
-    env_file:
-      - ${CONFIG_FILES_PATH}/elk/elk.env
     environment:
-      - ES_JAVA_OPTS=-Xmx2g -Xms2g
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      # Half the memory limit; Elasticsearch needs the rest for off-heap memory and the filesystem cache.
+      - ES_JAVA_OPTS=-Xmx1g -Xms1g
+    # The backend's index analyzers need analysis-icu; install it on first start, then start Elasticsearch as usual.
+    command: >
+      bash -c '
+        bin/elasticsearch-plugin list | grep -q analysis-icu || bin/elasticsearch-plugin install --batch analysis-icu;
+        exec /usr/local/bin/docker-entrypoint.sh eswrapper
+      '
     ulimits:
       nproc: 65535
       memlock:
@@ -304,14 +355,16 @@ services:
     networks:
       - opencdmp-backend-network
     healthcheck:
-      test: curl -s http://localhost:9200 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
-      interval: 30s
+      test: ["CMD-SHELL", "curl -s -u elastic:$$ELASTIC_PASSWORD http://localhost:9200/_cluster/health | grep -qE '\"status\":\"(green|yellow)\"'"]
+      interval: 10s
       timeout: 10s
-      retries: 5
+      retries: 30
+      start_period: 30s
 
 #################################### KEYCLOAK ###############################################
   opencdmp.keycloak:
     restart: unless-stopped
+    # start-dev is for this local example only; production needs "start" with TLS and a hardened configuration.
     command: ["start-dev", "--log=console,file", "--log-file=/tmp/logs/keycloak.log", "--import-realm"]
     deploy:
       resources:
@@ -328,16 +381,16 @@ services:
       - JAVA_OPTS_APPEND="-Djava.net.preferIPv4Stack=true"
     volumes:
       - ${LOG_FILES_PATH}/keycloak:/tmp/logs
-      - ${CONFIG_FILES_PATH}/keycloak/user_init.sh:/tmp/user_init.sh
-      - ${CONFIG_FILES_PATH}/keycloak/health-check.sh:/tmp/health-check.sh
       - ${CONFIG_FILES_PATH}/keycloak/imports/OpenCDMP-realm.json:/opt/keycloak/data/import/OpenCDMP-realm.json
     expose:
       - "8080"
+    # The image has no curl; ask the management port with bash's /dev/tcp.
     healthcheck:
-      test: curl -s http://localhost:8080/realms/master >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
-      interval: 30s
-      retries: 5
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/localhost/9000 && printf 'GET /auth/health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && grep -q UP <&3"]
+      interval: 10s
       timeout: 10s
+      retries: 30
+      start_period: 30s
     networks:
       - opencdmp-proxy-network
       - opencdmp-backend-network

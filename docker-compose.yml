@@ -36,8 +36,8 @@ services:
         condition: service_healthy
       opencdmp.keycloak:
         condition: service_healthy
-      opencdmp.elasticsearch:
-        condition: service_healthy
+      opencdmp.elasticsearch.setup:
+        condition: service_completed_successfully
       opencdmp.rabbitmq:
         condition: service_healthy
 
@@ -97,6 +97,11 @@ services:
       opencdmp.backend:
         condition: service_started
 
+############################## INIT ############################################
+  opencdmp.init:
+    container_name: opencdmp.init
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_TAG}
+
 ############################## POSTGRES ############################################
   opencdmp.postgres:
     container_name: opencdmp.postgres
@@ -113,12 +118,17 @@ services:
   opencdmp.elasticsearch:
     container_name: opencdmp.elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_TAG}
+    depends_on:
+      opencdmp.init:
+        condition: service_completed_successfully
 
 ############################# KEYCLOAK ###############################################
   opencdmp.keycloak:
     container_name: opencdmp.keycloak
     image: quay.io/keycloak/keycloak:${KEYCLOAK_TAG}
     depends_on:
+      opencdmp.init:
+        condition: service_completed_successfully
       opencdmp.postgres:
         condition: service_healthy
 

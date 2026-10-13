@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-widthm initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>OpenCDMP Email</title>
         <style>
             @media only screen and (max-width: 620px) {
@@ -52,20 +52,26 @@
                                                 <span>
                                                     Dear <b style="color: #212121">{recipient}</b>,
                                                 </span>
-                                                <p style="color: #666666">
-                                                    <b style="color: #212121">{reasonName}</b> just finalised the Description <b style="color: #212121">{name}</b>.
+                                                <p>
+                                                    <b style="color: #212121">{reasonName}</b> just finalised the Asset <b style="color: #212121">{name}</b>.
                                                 </p>
-                                                <table cellpadding="10" class="main-btn" style="background-color:#266edb; border-radius:24px; box-shadow: 0px 4px 4px 0px #0000001f">
-						                            <tr>
-                                                        <td width="24" height="10"></td>
-                                                        <td>
-                                                            <a class="main-btn-content" href="{installation-url}{tenant-url-path}/descriptions/overview/{id}" target="_blank" 
-                                                                style="text-decoration:none; color:white; display: block; width: max-content; font-weight: bold;"
-                                                            >                                                               
-                                                                Click here to view it
+                                                <table cellpadding="10">
+                                                    <tr>
+                                                        <td class="main-btn" style="background-color:#266edb; border-radius:24px; box-shadow: 0px 4px 4px 0px #0000001f">
+                                                            <a class="main-btn-content" href="{installation-url}{tenant-url-path}/assets/overview/{id}" target="_blank" 
+                                                                style="text-decoration:none; color:white; display: block; width: max-content;"
+                                                            >
+                                                                <table>
+                                                                    <tr>
+                                                                        <td width="24" height="10"></td>
+                                                                        <td>                                                                
+                                                                            <b>Click here to view it</b>
+                                                                        </td>
+                                                                        <td width="24" height="10"></td>
+                                                                    </tr>
+                                                                </table>
                                                             </a>
                                                         </td>
-                                                        <td width="24" height="10"></td>
                                                     </tr>
                                                 </table>
                                             </td>
@@ -81,7 +87,7 @@
                                 <td style="font-size: 14px">
                                     <span>
                                         This email was generated automaticaly. Please do not reply to this email.<br/>
-                                        &#169;OpenCDMP 2024. All rights reserved.
+                                        &#169;OpenCDMP 2026. All rights reserved.
                                     </span>
                                 </td>
                             </tr>

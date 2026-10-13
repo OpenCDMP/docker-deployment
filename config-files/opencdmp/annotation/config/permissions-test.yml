@@ -73,6 +73,7 @@ permissions:
       roles:
         - Admin
         - TenantAdmin
+      allowOwner: true
       clients: [ ]
       allowAnonymous: false
       allowAuthenticated: false
@@ -80,7 +81,7 @@ permissions:
       roles:
         - Admin
         - TenantAdmin
-      entityAffiliated: false
+      allowOwner: true
       clients: [ ]
       allowAnonymous: false
       allowAuthenticated: false
@@ -153,6 +154,13 @@ permissions:
       roles:
         - Admin
         - TenantAdmin
+      clients: [ ]
+      allowAnonymous: false
+      allowAuthenticated: false
+    # Transfer
+    TransferAnnotation:
+      roles:
+        - Admin
       clients: [ ]
       allowAnonymous: false
       allowAuthenticated: false
